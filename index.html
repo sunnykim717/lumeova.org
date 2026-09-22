@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMEOVA International | 미래를 여는 빛</title>
+<meta name="description" content="LUMEOVA International(루메오바) - 개발도상국 여성과 아동을 위한 교육 지원 국제개발협력 비영리단체">
+<style>
+  :root{
+    --light:#e8a33d;
+    --people:#3d8f7c;
+    --world:#3d6ea5;
+    --ink:#1f2430;
+    --muted:#6b7280;
+    --bg:#fffdf8;
+    --card:#ffffff;
+    --border:#eee2d0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.7;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+  header{
+    position:sticky;top:0;z-index:10;
+    background:rgba(255,253,248,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+  }
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;}
+  .brand{font-weight:700;font-size:18px;letter-spacing:-0.02em;}
+  .brand span{color:var(--light);}
+  nav{display:flex;gap:28px;font-size:14px;font-weight:500;}
+  nav a:hover{color:var(--light);}
+
+  .hero{
+    padding:96px 0 80px;
+    text-align:center;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(232,163,61,0.12), transparent 45%),
+      radial-gradient(circle at 80% 30%, rgba(61,110,165,0.10), transparent 45%);
+  }
+  .hero .tag{
+    display:inline-block;
+    font-size:13px;font-weight:600;letter-spacing:0.12em;
+    color:var(--light);text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:40px;font-weight:800;letter-spacing:-0.03em;
+    margin-bottom:20px;
+  }
+  .hero p{
+    max-width:560px;margin:0 auto;color:var(--muted);font-size:16px;
+  }
+  .badge-row{
+    display:flex;gap:12px;justify-content:center;margin-top:32px;flex-wrap:wrap;
+  }
+  .badge{
+    font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;
+    border:1px solid var(--border);background:var(--card);color:var(--muted);
+  }
+
+  section{padding:72px 0;}
+  section.alt{background:#fbf6ec;}
+  h2{font-size:26px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;}
+  .section-lead{color:var(--muted);font-size:15px;margin-bottom:40px;max-width:640px;}
+
+  .values{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .value-card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:28px 24px;
+  }
+  .value-card .dot{width:36px;height:36px;border-radius:10px;margin-bottom:16px;}
+  .value-card:nth-child(1) .dot{background:var(--light);}
+  .value-card:nth-child(2) .dot{background:var(--people);}
+  .value-card:nth-child(3) .dot{background:var(--world);}
+  .value-card h3{font-size:17px;margin-bottom:8px;}
+  .value-card p{font-size:14px;color:var(--muted);}
+
+  .about-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:start;}
+  .about-grid p{margin-bottom:14px;color:#3a3f4b;font-size:15px;}
+  .info-card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;
+  }
+  .info-card dl{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:14px;}
+  .info-card dt{color:var(--muted);white-space:nowrap;}
+  .info-card dd{color:var(--ink);font-weight:500;}
+
+  .countries{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .country-card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;
+    position:relative;
+  }
+  .country-card .rank{
+    position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;color:var(--muted);
+  }
+  .country-card h3{font-size:18px;margin-bottom:6px;}
+  .country-card p{font-size:13px;color:var(--muted);}
+  .first-project{
+    margin-top:32px;background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:24px 28px;
+  }
+  .first-project .kicker{font-size:12px;font-weight:700;color:var(--people);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+
+  .membership{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .tier-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;}
+  .tier-card h3{font-size:16px;margin-bottom:8px;}
+  .tier-card p{font-size:13px;color:var(--muted);}
+
+  footer{
+    padding:48px 0;border-top:1px solid var(--border);
+  }
+  footer .wrap{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);}
+
+  @media (max-width:800px){
+    .values,.countries,.membership{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr;}
+    nav{gap:16px;font-size:13px;}
+    .hero h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top">미래를 여는 <span>LUMEOVA</span></a>
+    <nav>
+      <a href="#about">소개</a>
+      <a href="#values">핵심가치</a>
+      <a href="#work">사업분야</a>
+      <a href="#membership">후원안내</a>
+      <a href="#contact">연락처</a>
+    </nav>
+  </div>
+</header>
+
+<div id="top"></div>
+<section class="hero">
+  <div class="wrap">
+    <span class="tag">LUMEOVA International · 루메오바</span>
+    <h1>개발도상국 여성과 아동에게<br>교육이라는 빛을 전합니다</h1>
+    <p>미래를 여는 빛(LUMEOVA International)은 국제개발협력 현장의 목소리를 바탕으로 설립된 비영리단체로, 개발도상국 여성·아동 교육 지원을 통해 지속가능한 변화를 만들어갑니다.</p>
+    <div class="badge-row">
+      <span class="badge">국제개발협력 · 교육지원</span>
+      <span class="badge">2026년 설립</span>
+      <span class="badge">인천 계양구</span>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div>
+      <h2>단체 소개</h2>
+      <p class="section-lead" style="margin-bottom:20px;">현장에서 시작된 단체입니다</p>
+      <p>미래를 여는 빛(LUMEOVA International)은 KOICA 해외봉사단 등 국제개발협력 현장 경험을 바탕으로 설립되었습니다. 현장 사정을 충분히 반영하지 못한 채 진행되는 단기 성과 중심의 사업, 그리고 교육처럼 시간이 걸리는 과제에 대한 낮은 관심을 지켜보며, 현장의 목소리가 실제 사업에 반영되는 단체가 필요하다는 문제의식에서 출발했습니다.</p>
+      <p>현장에서 일하는 사람도, 도움을 받는 사람도 함께 행복할 수 있는 단체를 지향합니다.</p>
+    </div>
+    <div class="info-card">
+      <dl>
+        <dt>단체명</dt><dd>미래를 여는 빛 (LUMEOVA International)</dd>
+        <dt>형태</dt><dd>비영리 임의단체</dd>
+        <dt>대표</dt><dd>김선희</dd>
+        <dt>임원 구성</dt><dd>대표 1인 · 이사 1인 · 감사 1인</dd>
+        <dt>설립</dt><dd>2026년, 창립회원 3인</dd>
+        <dt>소재지</dt><dd>인천광역시 계양구</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="values" class="alt">
+  <div class="wrap">
+    <h2>핵심가치</h2>
+    <p class="section-lead">LUMEOVA는 LIGHT · PEOPLE · WORLD, 세 가지 가치를 중심으로 활동합니다.</p>
+    <div class="values">
+      <div class="value-card">
+        <div class="dot"></div>
+        <h3>LIGHT</h3>
+        <p>교육이라는 빛을 통해 더 나은 미래로 나아갈 기회를 전합니다.</p>
+      </div>
+      <div class="value-card">
+        <div class="dot"></div>
+        <h3>PEOPLE</h3>
+        <p>현장의 사람들, 그리고 함께하는 사람들이 중심이 되는 단체를 만듭니다.</p>
+      </div>
+      <div class="value-card">
+        <div class="dot"></div>
+        <h3>WORLD</h3>
+        <p>특정 지역을 넘어, 더 넓은 세계와 연결된 지속가능한 변화를 추구합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <h2>사업분야 &amp; 활동 대상국</h2>
+    <p class="section-lead">해외 파견 경험을 바탕으로 기존 네트워크가 있는 국가를 우선으로 사업을 준비하고 있습니다.</p>
+    <div class="countries">
+      <div class="country-card">
+        <span class="rank">1순위</span>
+        <h3>부룬디</h3>
+        <p>현지 단체와의 협력을 통한 첫 사업 준비 국가</p>
+      </div>
+      <div class="country-card">
+        <span class="rank">2순위</span>
+        <h3>탄자니아</h3>
+        <p>사업 확장 대상국</p>
+      </div>
+      <div class="country-card">
+        <span class="rank">3순위</span>
+        <h3>캄보디아</h3>
+        <p>사업 확장 대상국</p>
+      </div>
+    </div>
+    <div class="first-project">
+      <div class="kicker">첫 사업 (준비중)</div>
+      <p>부룬디 현지에서 활동 중인 단체 <strong>"Ten for One"</strong>과의 협력(MOU)을 통해 학용품 지원 사업을 시작할 계획입니다.</p>
+    </div>
+  </div>
+</section>
+
+<section id="membership" class="alt">
+  <div class="wrap">
+    <h2>후원 및 회원 안내</h2>
+    <p class="section-lead">LUMEOVA는 세 가지 회원 제도를 운영합니다.</p>
+    <div class="membership">
+      <div class="tier-card">
+        <h3>정회원</h3>
+        <p>단체 운영에 참여하며 의결권을 가진 회원입니다.</p>
+      </div>
+      <div class="tier-card">
+        <h3>일반회원</h3>
+        <p>단체 활동에 함께하는 회원입니다.</p>
+      </div>
+      <div class="tier-card">
+        <h3>후원회원</h3>
+        <p>정기 후원으로 활동을 지원하는 회원으로, 의결권은 없습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <h2>연락처</h2>
+    <p class="section-lead">문의 및 후원 관련 연락은 아래 이메일로 부탁드립니다.</p>
+    <div class="info-card" style="max-width:420px;">
+      <dl>
+        <dt>이메일</dt><dd>sunnykim717@gmail.com</dd>
+        <dt>소재지</dt><dd>인천광역시 계양구</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>&copy; 2026 미래를 여는 빛 (LUMEOVA International). All rights reserved.</div>
+    <div>본 사이트는 준비 중이며, 내용은 계속 업데이트됩니다.</div>
+  </div>
+</footer>
+
+</body>
+</html>
