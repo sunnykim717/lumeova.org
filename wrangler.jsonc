@@ -1,0 +1,28 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "lumeova-website",
+	"compatibility_date": "2026-09-23",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			// Self-reference service binding — required by the OpenNext Cloudflare
+			// adapter's internals. The service name must match "name" above.
+			// https://opennext.js.org/cloudflare/caching
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "lumeova-website"
+		}
+	]
+	// Intentionally minimal for the first deploy: no R2 incremental-cache
+	// bucket and no Images binding, so `wrangler deploy` doesn't need any
+	// pre-provisioned Cloudflare resources beyond the Worker itself. This
+	// site doesn't use ISR/on-demand revalidation yet, and every image today
+	// is a placeholder (next.config.ts sets images.unoptimized), so neither
+	// is needed yet. Add them later if that changes — see
+	// https://opennext.js.org/cloudflare/caching and
+	// https://opennext.js.org/cloudflare/howtos/image
+}
