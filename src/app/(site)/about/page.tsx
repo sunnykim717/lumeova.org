@@ -134,40 +134,35 @@ export default function AboutPage() {
       </section>
 
       <section className="section-wrap pb-16 md:pb-20">
-        <h2 className="font-display text-[22px] text-navy mb-8">CI 소개</h2>
-        <div className="grid md:grid-cols-2 gap-10 items-center">
+        <h2 className="font-display text-[22px] text-navy mb-12">CI 소개</h2>
+
+        <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="flex justify-center md:justify-start">
             <div className="bg-white border border-border rounded-sm p-6">
-              <Logo
-                size="brand-story"
-              />
+              <Logo size="brand-story" />
             </div>
           </div>
-          <div className="space-y-4 text-[14px]">
+
+          <div className="space-y-6 text-[15px]">
             <div>
-              <p className="text-navy font-medium mb-1">Brand Name</p>
-              <p className="text-muted">미래를여는빛 (Lumeova International)</p>
+              <h3 className="font-display text-[18px] text-navy mb-2">LUMEOVA — 빛으로 미래를 열다</h3>
             </div>
-            <div>
-              <p className="text-navy font-medium mb-1">Slogan</p>
+
+            <div className="space-y-4 text-muted leading-relaxed">
+              <p>
+                LUMEOVA의 심볼은 브랜드명의 핵심인 L과 O를 바탕으로 구성했습니다.
+              </p>
+              <p>
+                왼쪽의 유려한 곡선은 <strong>LUMEOVA의 'L'</strong>을 형상화한 것으로, 빛이 퍼지고 새로운 길이 열리는 모습을 담고 있습니다. 중앙의 원형 구조는 <strong>'O'</strong>를 중심으로 사람과 사람, 지역과 세계가 연결되는 모습을 상징합니다.
+              </p>
+              <p>
+                LUMEOVA는 라틴어로 빛을 뜻하는 LUMEN과 새로운 시작과 변화를 상징하는 NOVA에서 영감을 받아 만든 이름입니다.
+              </p>
+            </div>
+
+            <div className="border-t border-border pt-6">
+              <p className="text-navy font-medium mb-2">{ORG.nameKo}</p>
               <p className="text-muted">{ORG.sloganKo}</p>
-            </div>
-            <div>
-              <p className="text-navy font-medium mb-1">Brand Colors</p>
-              <div className="space-y-2">
-                <p className="text-muted">
-                  <span className="inline-block w-6 h-6 bg-[#D4AF37] rounded mr-2 border border-border"></span>
-                  Gold #D4AF37
-                </p>
-                <p className="text-muted">
-                  <span className="inline-block w-6 h-6 bg-[#0D1B2A] rounded mr-2 border border-border"></span>
-                  Navy #0D1B2A
-                </p>
-              </div>
-            </div>
-            <div>
-              <p className="text-navy font-medium mb-1">Typography</p>
-              <p className="text-muted">Playfair Display · Noto Sans KR</p>
             </div>
           </div>
         </div>
