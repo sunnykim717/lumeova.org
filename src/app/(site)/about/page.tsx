@@ -140,11 +140,6 @@ export default function AboutPage() {
             <div className="bg-white border border-border rounded-sm p-6">
               <Logo
                 size="brand-story"
-                className="hidden md:inline-flex"
-              />
-              <Logo
-                size="brand-story"
-                className="inline-flex md:hidden"
               />
             </div>
           </div>
