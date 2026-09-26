@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { MAIN_NAV } from "@/lib/constants/nav";
-import { ORG } from "@/lib/constants/brand";
 import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
@@ -32,23 +30,15 @@ export function Header() {
       }`}
     >
       <div className="section-wrap flex h-[84px] items-center justify-between">
-        <Link href="/" className="flex items-center flex-shrink-0 gap-2" onClick={() => setOpen(false)}>
-          <div className="flex flex-col gap-0">
-            <Logo
-              size="header"
-              className="hidden md:inline-flex"
-            />
-            <p className="hidden md:block text-[11px] font-medium tracking-wide text-cream/80 -mt-1">
-              {ORG.sloganKo}
-            </p>
-            <Logo
-              size="header-mobile"
-              className="inline-flex md:hidden"
-            />
-            <p className="inline-flex md:hidden text-[9px] font-medium tracking-wide text-cream/80 -mt-0.5">
-              {ORG.sloganKo}
-            </p>
-          </div>
+        <Link href="/" className="flex items-center flex-shrink-0" onClick={() => setOpen(false)}>
+          <Logo
+            size="header"
+            className="hidden md:inline-flex"
+          />
+          <Logo
+            size="header-mobile"
+            className="inline-flex md:hidden"
+          />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8 text-[15px] font-medium tracking-wide">

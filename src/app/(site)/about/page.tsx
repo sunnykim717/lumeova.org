@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { Logo } from "@/components/ui/Logo";
 import { ORG } from "@/lib/constants/brand";
 
@@ -60,55 +59,32 @@ function IconTrust() {
   );
 }
 
-const VALUES = [
-  {
-    icon: <IconLight />,
-    title: "빛 · Light",
-    body: "교육이라는 빛을 통해 더 나은 미래로 나아갈 기회를 전합니다.",
-  },
-  {
-    icon: <IconPeople />,
-    title: "사람 · People",
-    body: "현장의 사람들, 그리고 함께하는 사람들이 중심이 되는 단체를 만듭니다.",
-  },
-  {
-    icon: <IconTrust />,
-    title: "신뢰 · Trust",
-    body: "약속한 만큼, 확인된 만큼만 이야기하는 단체가 되고자 합니다.",
-  },
-];
+function getValues() {
+  return ORG.coreValues.map((v, i) => {
+    const icons = [<IconLight key="light" />, <IconPeople key="people" />, <IconTrust key="trust" />];
+    return {
+      icon: icons[i],
+      title: `${v.ko} · ${v.en}`,
+      body: v.desc,
+    };
+  });
+}
 
 export default function AboutPage() {
   return (
     <div>
-      <section className="section-wrap py-16 md:py-20 grid md:grid-cols-2 gap-10 items-start">
-        <div>
-          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">About</p>
-          <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-5">단체 소개</h1>
-          <p className="text-[15px] text-muted leading-relaxed mb-4">
-            {ORG.nameKo}({ORG.nameEn})은 국제개발협력 현장 경험을 바탕으로
-            설립된 비영리단체로, 현장의 목소리가 실제 사업에 반영되는 단체를
-            지향합니다.
-          </p>
-          <p className="text-[15px] text-muted leading-relaxed">
-            현장에서 일하는 사람도, 도움을 받는 사람도 함께 행복할 수 있는
-            단체가 되는 것을 지향합니다.
-          </p>
-        </div>
-        <dl className="rounded-sm border border-border bg-white p-6 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-[14px]">
-          <dt className="text-muted">단체명</dt>
-          <dd className="text-ink font-medium">
-            {ORG.nameKo} ({ORG.nameEn})
-          </dd>
-          <dt className="text-muted">형태</dt>
-          <dd className="text-ink font-medium">{ORG.legalForm}</dd>
-          <dt className="text-muted">대표</dt>
-          <dd className="text-ink font-medium">{ORG.representative}</dd>
-          <dt className="text-muted">설립</dt>
-          <dd className="text-ink font-medium">{ORG.founded}</dd>
-          <dt className="text-muted">소재지</dt>
-          <dd className="text-ink font-medium">{ORG.region}</dd>
-        </dl>
+      <section className="section-wrap py-16 md:py-20 max-w-3xl">
+        <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">About</p>
+        <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-8">단체 소개</h1>
+        <p className="text-[15px] text-muted leading-relaxed mb-6">
+          {ORG.nameKo}({ORG.nameEn})은 국제개발협력 현장 경험을 바탕으로
+          설립된 비영리단체로, 현장의 목소리가 실제 사업에 반영되는 단체를
+          지향합니다.
+        </p>
+        <p className="text-[15px] text-muted leading-relaxed">
+          현장에서 일하는 사람도, 도움을 받는 사람도 함께 행복할 수 있는
+          단체가 되는 것을 지향합니다.
+        </p>
       </section>
 
       <section className="bg-sage/50 py-16 md:py-20">
@@ -116,13 +92,13 @@ export default function AboutPage() {
           <div className="rounded-sm border border-navy/10 bg-cream p-7">
             <h2 className="font-display text-[19px] text-navy mb-3">Mission</h2>
             <p className="text-[15px] text-ink leading-relaxed">
-              교육과 협력을 통해 더 많은 사람이 자신의 가능성을 발견하고, 삶의 다음 걸음을 선택할 수 있도록 돕습니다.
+              {ORG.mission}
             </p>
           </div>
           <div className="rounded-sm border border-navy/10 bg-cream p-7">
             <h2 className="font-display text-[19px] text-navy mb-3">Vision</h2>
             <p className="text-[15px] text-ink leading-relaxed">
-              누구나 배움의 기회를 얻고, 지역사회와 함께 더 나은 미래를 만들어 가는 세상.
+              {ORG.vision}
             </p>
           </div>
         </div>
@@ -131,7 +107,7 @@ export default function AboutPage() {
       <section className="section-wrap py-16 md:py-20">
         <h2 className="font-display text-[22px] text-navy mb-8">핵심가치</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {VALUES.map((v) => (
+          {getValues().map((v) => (
             <div key={v.title}>
               <div className="mb-4">{v.icon}</div>
               <h3 className="font-display text-[16px] text-navy mb-2">{v.title}</h3>

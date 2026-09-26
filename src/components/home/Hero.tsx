@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import { ORG } from "@/lib/constants/brand";
 
 // 슬라이드 데이터 — 사진 파일은 /public/images/hero/ 에 위치
 // objectPosition: 얼굴이 잘리지 않도록 사진별로 초점 위치 지정
@@ -11,22 +10,22 @@ const SLIDES = [
   {
     src: "/images/hero/hero-1.jpg",
     alt: "건물 앞에 모인 아이들",
-    objectPosition: "center 25%",   // 학교 건물 장면 — 상단에 건물, 중간에 얼굴
-    title: ORG.nameKo,
-    desc: ORG.sloganKo,
+    objectPosition: "center 25%",
+    title: "교육으로 미래를 열어가겠습니다",
+    desc: "지속가능한 변화를 만들어가는 교육활동",
   },
   {
     src: "/images/hero/hero-2.jpg",
     alt: "현장 활동 지역 풍경",
-    objectPosition: "center center", // 풍경 사진 — 중앙 정렬
-    title: "현장에서 시작합니다",
+    objectPosition: "center center",
+    title: "교육으로 미래를 열어가겠습니다",
     desc: "직접 발로 뛰며 지역의 필요를 함께 찾아갑니다",
   },
   {
     src: "/images/hero/hero-3.jpg",
     alt: "야외에 모여 있는 많은 아이들",
-    objectPosition: "center 40%",   // 대규모 야외 단체 사진 — 얼굴 살짝 아래 기준
-    title: "배움이 가능성을 열다",
+    objectPosition: "center 40%",
+    title: "교육으로 미래를 열어가겠습니다",
     desc: "아이 한 명의 성장이 공동체 전체를 밝게 합니다",
   },
 ] as const;
@@ -72,20 +71,21 @@ export function Hero() {
         </div>
       ))}
 
-      {/* ── 상단 그라데이션: 헤더 메뉴 가독성 확보 ── */}
-      <div className="absolute inset-x-0 top-0 h-[160px] bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10" />
+      {/* ── 상단 그라데이션: 헤더 메뉴 가독성 확보 (Navy 기반) ── */}
+      <div
+        className="absolute inset-x-0 top-0 h-[200px] pointer-events-none z-10"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(13,27,42,0.58) 0%, rgba(13,27,42,0.34) 28%, rgba(13,27,42,0.08) 58%, rgba(13,27,42,0) 100%)`
+        }}
+      />
 
       {/* ── 하단 그라데이션: 텍스트·CTA 가독성 확보 ── */}
       <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/75 via-black/40 to-transparent pointer-events-none z-10" />
 
       {/* ── 텍스트 / CTA — 하단 배치, 얼굴 영역(상단) 비침 ── */}
-      <div className="absolute inset-x-0 bottom-0 section-wrap pb-14 md:pb-20 text-cream z-20">
-        <p className="text-[12px] md:text-[13px] font-semibold tracking-[0.18em] uppercase text-gold mb-2">
-          {ORG.nameEn}
-        </p>
-
+      <div className="absolute inset-x-0 bottom-0 section-wrap pb-14 md:pb-20 text-white z-20">
         {/* 슬라이드별 제목·설명 — 페이드 전환 */}
-        <div className="relative min-h-[120px] md:min-h-[130px]">
+        <div className="relative min-h-[140px] md:min-h-[160px]">
           {SLIDES.map((slide, i) => (
             <div
               key={i}
@@ -93,10 +93,10 @@ export function Hero() {
                 i === idx ? "opacity-100" : "opacity-0 absolute inset-0"
               }`}
             >
-              <h1 className="font-display text-[28px] md:text-[44px] leading-[1.2] mb-3 max-w-2xl">
+              <h1 className="font-display text-[30px] md:text-[48px] leading-[1.25] md:leading-[1.25] mb-3 max-w-2xl text-white font-bold" style={{ textShadow: "0 2px 6px rgba(0,0,0,0.28)" }}>
                 {slide.title}
               </h1>
-              <p className="text-[15px] md:text-[18px] text-cream/90 max-w-lg">{slide.desc}</p>
+              <p className="text-[15px] md:text-[18px] text-white/85 max-w-lg">{slide.desc}</p>
             </div>
           ))}
         </div>

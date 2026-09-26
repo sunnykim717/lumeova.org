@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { Turnstile } from "react-turnstile";
 import { Button } from "@/components/ui/Button";
 import { SUGGESTED_AMOUNTS } from "@/lib/validation/donation";
 
@@ -20,6 +21,7 @@ export function DonationForm() {
   const [customAmount, setCustomAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   const effectiveAmount = customAmount ? Number(customAmount) : amount;
 
@@ -27,6 +29,12 @@ export function DonationForm() {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
+
+    if (!turnstileToken) {
+      setError("스팸 방지 인증이 필요합니다. 잠시 후 다시 시도해 주세요.");
+      setSubmitting(false);
+      return;
+    }
 
     const form = new FormData(e.currentTarget);
     const payload = {
@@ -39,6 +47,7 @@ export function DonationForm() {
       memo: String(form.get("memo") || ""),
       privacyConsent: form.get("privacyConsent") === "on",
       marketingConsent: form.get("marketingConsent") === "on",
+      turnstileToken,
     };
 
     try {
@@ -51,12 +60,14 @@ export function DonationForm() {
       if (!res.ok) {
         setError(data.error ?? "신청 중 오류가 발생했습니다.");
         setSubmitting(false);
+        setTurnstileToken("");
         return;
       }
       router.push("/donate/complete");
     } catch {
       setError("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
       setSubmitting(false);
+      setTurnstileToken("");
     }
   }
 
@@ -155,6 +166,18 @@ export function DonationForm() {
           <span>[선택] 소식 및 활동 안내 이메일 수신에 동의합니다.</span>
         </label>
       </div>
+
+      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+        <div className="flex justify-center">
+          <Turnstile
+            sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            theme="light"
+            onSuccess={(token) => setTurnstileToken(token)}
+            onError={() => setTurnstileToken("")}
+            onExpire={() => setTurnstileToken("")}
+          />
+        </div>
+      )}
 
       {error && <p className="text-[13px] text-red-600">{error}</p>}
 

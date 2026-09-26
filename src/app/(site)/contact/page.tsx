@@ -15,21 +15,27 @@ export default function ContactPage() {
       </p>
       <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-6">문의하기</h1>
       <p className="text-[14.5px] text-muted leading-relaxed mb-10">
-        {ORG.nameKo}에 궁금하신 점이 있으시면 아래 연락처로 문의해 주세요.
-        회원가입 또는 후원 관련 문의는 각 신청 페이지를 이용해 주시면 더 빠르게
-        도와드릴 수 있습니다.
+        {ORG.nameKo}의 활동, 회원가입, 후원과 관련해 궁금한 점이 있으시면 아래 연락처로 문의해 주세요.
       </p>
 
-      <dl className="rounded-sm border border-border bg-white p-6 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-[14px] mb-10">
-        <dt className="text-muted">주소</dt>
-        <dd className="text-ink font-medium">{ORG.address ?? "주소 확정 후 표기 예정"}</dd>
-        <dt className="text-muted">전화</dt>
-        <dd className="text-ink font-medium">{ORG.phone ?? "연락처 확정 후 표기 예정"}</dd>
-        <dt className="text-muted">이메일</dt>
-        <dd className="text-ink font-medium">{ORG.email ?? "이메일 확정 후 표기 예정"}</dd>
-        <dt className="text-muted">소재지</dt>
-        <dd className="text-ink font-medium">{ORG.region}</dd>
-      </dl>
+      <div className="rounded-sm border border-border bg-white p-6 text-[14px] space-y-6 mb-10">
+        <div>
+          <p className="text-muted text-[12px] font-semibold uppercase tracking-wide mb-2">소재지</p>
+          <p className="text-ink">{ORG.location}</p>
+        </div>
+        <div>
+          <p className="text-muted text-[12px] font-semibold uppercase tracking-wide mb-2">전화</p>
+          <a href={`tel:+821025433659`} className="text-gold hover:text-gold-dark font-medium">
+            {ORG.phone}
+          </a>
+        </div>
+        <div>
+          <p className="text-muted text-[12px] font-semibold uppercase tracking-wide mb-2">이메일</p>
+          <a href={`mailto:${ORG.email}`} className="text-gold hover:text-gold-dark font-medium">
+            {ORG.email}
+          </a>
+        </div>
+      </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
         <Link

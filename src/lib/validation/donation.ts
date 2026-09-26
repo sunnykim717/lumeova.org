@@ -23,6 +23,7 @@ export const donationApplicationSchema = z.object({
     message: "개인정보 수집 및 이용에 동의해 주세요.",
   }),
   marketingConsent: z.boolean().default(false),
+  turnstileToken: z.string().min(1, "스팸 방지 인증이 필요합니다."),
 });
 
 export type DonationApplicationInput = z.infer<typeof donationApplicationSchema>;

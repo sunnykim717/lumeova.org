@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { ORG, DONATION_ACCOUNT } from "@/lib/constants/brand";
@@ -8,28 +7,35 @@ export function Footer() {
   return (
     <footer className="bg-navy text-cream/80">
       <div className="section-wrap py-12">
-        {/* 로고 + 슬로건 */}
-        <div className="mb-12 pb-12 border-b border-white/10">
-          <Logo
-            size="footer"
-            className="hidden md:inline-flex mb-6"
-          />
-          <Logo
-            size="footer-mobile"
-            className="inline-flex md:hidden mb-5"
-          />
-          <p className="text-[14px] md:text-[15px] text-cream font-medium leading-relaxed max-w-sm">
-            {ORG.sloganKo}
-          </p>
+        {/* 세로선 + Logo */}
+        <div className="flex gap-6 md:gap-8 mb-12 pb-12 border-b border-white/10">
+          <div className="w-1 bg-gradient-to-b from-gold to-gold/40 flex-shrink-0"></div>
+
+          <div className="flex flex-col">
+            {/* Logo */}
+            <Logo
+              size="footer"
+              className="hidden md:inline-flex flex-shrink-0"
+            />
+            <Logo
+              size="footer-mobile"
+              className="inline-flex md:hidden flex-shrink-0"
+            />
+
+            {/* 슬로건 */}
+            <p className="text-[16px] md:text-[19px] text-white/90 font-semibold leading-relaxed mt-8 md:mt-10">
+              {ORG.sloganKo}
+            </p>
+          </div>
         </div>
 
         {/* 연락처 + 후원계좌 */}
         <div className="grid gap-10 md:grid-cols-2">
           <div className="text-[13px] leading-relaxed space-y-1">
-            <p className="text-cream/50 uppercase tracking-wide text-[11px] mb-2">연락처</p>
-            <p>{ORG.address ?? "주소 확정 후 표기 예정"}</p>
-            <p>{ORG.phone ?? "연락처 확정 후 표기 예정"}</p>
-            <p>{ORG.email ?? "이메일 확정 후 표기 예정"}</p>
+            <p className="text-cream/50 uppercase tracking-wide text-[11px] mb-2">대표전화</p>
+            <p>+82-10-2543-3659</p>
+            <p className="text-cream/50 uppercase tracking-wide text-[11px] mb-2 mt-4">이메일</p>
+            <p>lumeova.int@gmail.com</p>
           </div>
 
           <div className="text-[13px] leading-relaxed space-y-1">

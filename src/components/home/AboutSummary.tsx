@@ -29,13 +29,9 @@ export function AboutSummary() {
           <h2 className="font-display text-[26px] md:text-[30px] text-navy mb-5">
             {ORG.nameKo}은 어떤 단체인가요
           </h2>
-          <p className="text-[15px] text-muted leading-relaxed mb-4">
+          <p className="text-[15px] text-muted leading-relaxed mb-6">
             {ORG.nameKo}({ORG.nameEn})은 국제개발협력 현장 경험을 바탕으로 설립된
             비영리단체로, 교육을 통해 지속가능한 변화를 만들어가고자 합니다.
-          </p>
-          <p className="text-[15px] text-muted leading-relaxed mb-6">
-            단체의 설립 목적과 Mission·Vision은 정관 확정 이후 이 페이지에 함께
-            안내해 드릴 예정입니다.
           </p>
           <Link href="/about" className="text-[14px] font-medium text-navy underline underline-offset-4 hover:text-gold-dark">
             단체 소개 자세히 보기 →

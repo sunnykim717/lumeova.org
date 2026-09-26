@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DonationPaymentControl } from "@/components/admin/DonationPaymentControl";
 
@@ -61,12 +62,12 @@ export default async function AdminDonationsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-[24px] text-navy">후원</h1>
-        <a
+        <Link
           href="/admin/donations/export"
           className="text-[13px] px-4 py-2 rounded-sm border border-navy/20 text-navy hover:border-navy/40"
         >
           CSV 내보내기
-        </a>
+        </Link>
       </div>
 
       <div className="rounded-sm border border-navy/10 bg-white overflow-x-auto">

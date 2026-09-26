@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Additional ignores:
+    ".open-next/**",
+    "node_modules/**",
+    "dist/**",
+    "remove-bg.js",
   ]),
 ]);
 

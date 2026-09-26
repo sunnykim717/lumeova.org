@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { donationApplicationSchema } from "@/lib/validation/donation";
 import { createClient } from "@/lib/supabase/server";
 import { isRateLimited, getClientIp } from "@/lib/utils/rateLimit";
+import { verifyTurnstileToken } from "@/lib/utils/turnstile";
 import { DONATION_ACCOUNT } from "@/lib/constants/brand";
 import { PRIVACY_POLICY_VERSION } from "@/lib/constants/legal";
 
@@ -24,6 +25,13 @@ export async function POST(req: NextRequest) {
   }
 
   const input = parsed.data;
+
+  // Verify Turnstile token
+  const turnstileValid = await verifyTurnstileToken(input.turnstileToken);
+  if (!turnstileValid) {
+    return NextResponse.json({ error: "스팸 방지 인증에 실패했습니다. 다시 시도해 주세요." }, { status: 400 });
+  }
+
   const supabase = await createClient();
 
   // 1) Supporter record (guest donations are allowed — no login required).

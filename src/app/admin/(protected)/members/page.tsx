@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { maskEmail, maskPhone } from "@/lib/utils/mask";
 import { MemberActions } from "@/components/admin/MemberActions";
@@ -56,17 +57,17 @@ export default async function AdminMembersPage({ searchParams }: Props) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-[24px] text-navy">회원</h1>
-        <a
+        <Link
           href="/admin/members/export"
           className="text-[13px] px-4 py-2 rounded-sm border border-navy/20 text-navy hover:border-navy/40"
         >
           CSV 내보내기
-        </a>
+        </Link>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
         {STATUS_TABS.map((tab) => (
-          <a
+          <Link
             key={tab.value}
             href={tab.value === "all" ? "/admin/members" : `/admin/members?status=${tab.value}`}
             className={`text-[12.5px] px-3.5 py-1.5 rounded-full border transition-colors ${
@@ -76,7 +77,7 @@ export default async function AdminMembersPage({ searchParams }: Props) {
             }`}
           >
             {tab.label}
-          </a>
+          </Link>
         ))}
       </div>
 
