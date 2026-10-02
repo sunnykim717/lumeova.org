@@ -54,7 +54,7 @@ export function ImagePlaceholder({
       aria-label={alt}
     >
       <span className="text-navy/50 text-xs tracking-wide font-medium px-4 text-center">
-        {label ?? "사진 준비중"}
+        {label ?? "사진 준비 중"}
       </span>
     </div>
   );

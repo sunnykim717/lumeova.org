@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidBirthDate } from "@/lib/utils/birthDate";
 
 export const membershipTypeSchema = z.enum(["regular", "general"]);
 
@@ -12,7 +13,10 @@ export const membershipApplicationSchema = z.object({
     .or(z.literal("")),
   email: z.string().trim().email("이메일 형식을 확인해 주세요.").optional().or(z.literal("")),
   address: z.string().trim().max(300).optional().or(z.literal("")),
-  birthDate: z.string().trim().optional().or(z.literal("")),
+  birthDate: z.string().trim().refine(
+    (value) => value === "" || isValidBirthDate(value),
+    "생년월일을 확인해 주세요.",
+  ).optional(),
   membershipType: membershipTypeSchema,
   memo: z.string().trim().max(1000).optional().or(z.literal("")),
   privacyConsent: z.literal(true, {

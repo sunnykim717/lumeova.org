@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Database } from "@/lib/types/database";
 
@@ -17,7 +17,8 @@ interface DonationDetail {
   adminNotes: AdminNote[];
 }
 
-export default function DonationDetailPage({ params }: { params: { id: string } }) {
+export default function DonationDetailPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
+  const params = use(paramsPromise);
   const [data, setData] = useState<DonationDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

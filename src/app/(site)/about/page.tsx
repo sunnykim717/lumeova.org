@@ -4,119 +4,81 @@ import { ORG } from "@/lib/constants/brand";
 
 export const metadata: Metadata = {
   title: "단체 소개",
-  description: `${ORG.nameKo} 소개, 설립 목적, Mission·Vision, 핵심가치`,
+  description: `${ORG.nameKo} 소개, 설립 목적, Mission·Vision, 핵심 가치`,
 };
-
-// 핵심가치 SVG 아이콘 — 빛·사람·신뢰
-function IconLight() {
-  return (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true" className="text-gold">
-      <circle cx="18" cy="18" r="7" stroke="currentColor" strokeWidth="2.2" />
-      <line x1="18" y1="2" x2="18" y2="6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="18" y1="30" x2="18" y2="34" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="2" y1="18" x2="6" y2="18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="30" y1="18" x2="34" y2="18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="6.34" y1="6.34" x2="9.17" y2="9.17" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="26.83" y1="26.83" x2="29.66" y2="29.66" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="29.66" y1="6.34" x2="26.83" y2="9.17" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="9.17" y1="26.83" x2="6.34" y2="29.66" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function IconPeople() {
-  return (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true" className="text-gold">
-      {/* 왼쪽 사람 */}
-      <circle cx="13" cy="11" r="4.5" stroke="currentColor" strokeWidth="2.2" />
-      <path d="M4 28c0-5 4-8 9-8" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      {/* 오른쪽 사람 */}
-      <circle cx="23" cy="11" r="4.5" stroke="currentColor" strokeWidth="2.2" />
-      <path d="M32 28c0-5-4-8-9-8" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      {/* 두 사람 연결 */}
-      <path d="M13 20c1.5-0.7 3-1 5-1s3.5 0.3 5 1" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function IconTrust() {
-  return (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true" className="text-gold">
-      <path
-        d="M18 3L5 8v10c0 8 6 14 13 15 7-1 13-7 13-15V8L18 3z"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinejoin="round"
-      />
-      <polyline
-        points="12 18 16 22 24 14"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function getValues() {
-  return ORG.coreValues.map((v, i) => {
-    const icons = [<IconLight key="light" />, <IconPeople key="people" />, <IconTrust key="trust" />];
-    return {
-      icon: icons[i],
-      title: `${v.ko} · ${v.en}`,
-      body: v.desc,
-    };
-  });
-}
 
 export default function AboutPage() {
   return (
     <div>
-      <section className="section-wrap py-16 md:py-20 max-w-3xl">
-        <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">About</p>
-        <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-8">단체 소개</h1>
-        <p className="text-[15px] text-muted leading-relaxed mb-6">
-          {ORG.nameKo}({ORG.nameEn})은 국제개발협력 현장 경험을 바탕으로
-          설립된 비영리단체로, 현장의 목소리가 실제 사업에 반영되는 단체를
-          지향합니다.
-        </p>
-        <p className="text-[15px] text-muted leading-relaxed">
-          현장에서 일하는 사람도, 도움을 받는 사람도 함께 행복할 수 있는
-          단체가 되는 것을 지향합니다.
-        </p>
+      {/* ── 소개 + 기본 정보 ── */}
+      <section className="section-wrap py-16 md:py-20">
+        <div className="max-w-3xl">
+          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">About</p>
+          <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-5">단체 소개</h1>
+          <p className="text-[15px] text-muted leading-relaxed mb-4">
+            {ORG.nameKo}({ORG.nameEn})은 국제개발협력 현장 경험을 바탕으로
+            설립된 비영리단체로, 현장의 목소리가 실제 사업에 반영되는 단체를
+            지향합니다.
+          </p>
+          <p className="text-[15px] text-muted leading-relaxed">
+            현장에서 일하는 사람도, 도움을 받는 사람도 함께 행복할 수 있는
+            단체가 되는 것을 지향합니다.
+          </p>
+        </div>
       </section>
 
+      {/* ── Mission · Vision ── */}
       <section className="bg-sage/50 py-16 md:py-20">
-        <div className="section-wrap grid md:grid-cols-2 gap-8">
-          <div className="rounded-sm border border-navy/10 bg-cream p-7">
-            <h2 className="font-display text-[19px] text-navy mb-3">Mission</h2>
-            <p className="text-[15px] text-ink leading-relaxed">
+        <div className="section-wrap grid md:grid-cols-2 gap-12">
+          <div>
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-dark mb-3">
+              Mission
+            </p>
+            <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65]">
               {ORG.mission}
             </p>
           </div>
-          <div className="rounded-sm border border-navy/10 bg-cream p-7">
-            <h2 className="font-display text-[19px] text-navy mb-3">Vision</h2>
-            <p className="text-[15px] text-ink leading-relaxed">
+          <div>
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-dark mb-3">
+              Vision
+            </p>
+            <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65]">
               {ORG.vision}
             </p>
           </div>
         </div>
       </section>
 
+      {/* ── 핵심 가치 — typography + dividers only, no icons ── */}
       <section className="section-wrap py-16 md:py-20">
-        <h2 className="font-display text-[22px] text-navy mb-8">핵심가치</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {getValues().map((v) => (
-            <div key={v.title}>
-              <div className="mb-4">{v.icon}</div>
-              <h3 className="font-display text-[16px] text-navy mb-2">{v.title}</h3>
-              <p className="text-[15px] text-muted leading-relaxed">{v.body}</p>
+        <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-2">
+          Core Values
+        </p>
+        <h2 className="font-display text-[22px] text-navy mb-10">핵심 가치</h2>
+        <div>
+          {ORG.coreValues.map((v, i) => (
+            <div key={v.id}>
+              {i > 0 && <div className="border-t border-border my-8" />}
+              <div className="grid md:grid-cols-[200px_1fr] gap-3 md:gap-8 items-baseline">
+                <div>
+                  <span className="font-display text-[13px] tracking-[0.12em] text-gold-dark">
+                    0{i + 1}
+                  </span>
+                  <h3 className="font-display text-[18px] text-navy mt-1">
+                    {v.titleKo}{" "}
+                    <span className="text-[14px] font-normal text-muted tracking-wide">
+                      · {v.titleEn}
+                    </span>
+                  </h3>
+                </div>
+                <p className="text-[15px] text-muted leading-relaxed">{v.body}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
+      {/* ── 연혁 ── */}
       <section className="section-wrap pb-16 md:pb-20">
         <h2 className="font-display text-[22px] text-navy mb-6">연혁</h2>
         {ORG.history.length === 0 ? (
@@ -133,6 +95,7 @@ export default function AboutPage() {
         )}
       </section>
 
+      {/* ── CI 소개 ── */}
       <section className="section-wrap pb-16 md:pb-20">
         <h2 className="font-display text-[22px] text-navy mb-12">CI 소개</h2>
 
@@ -153,7 +116,7 @@ export default function AboutPage() {
                 LUMEOVA의 심볼은 브랜드명의 핵심인 L과 O를 바탕으로 구성했습니다.
               </p>
               <p>
-                왼쪽의 유려한 곡선은 <strong>LUMEOVA의 'L'</strong>을 형상화한 것으로, 빛이 퍼지고 새로운 길이 열리는 모습을 담고 있습니다. 중앙의 원형 구조는 <strong>'O'</strong>를 중심으로 사람과 사람, 지역과 세계가 연결되는 모습을 상징합니다.
+                왼쪽의 유려한 곡선은 <strong>LUMEOVA의 &apos;L&apos;</strong>을 형상화한 것으로, 빛이 퍼지고 새로운 길이 열리는 모습을 담고 있습니다. 중앙의 원형 구조는 <strong>&apos;O&apos;</strong>를 중심으로 사람과 사람, 지역과 세계가 연결되는 모습을 상징합니다.
               </p>
               <p>
                 LUMEOVA는 라틴어로 빛을 뜻하는 LUMEN과 새로운 시작과 변화를 상징하는 NOVA에서 영감을 받아 만든 이름입니다.

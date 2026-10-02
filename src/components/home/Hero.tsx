@@ -23,8 +23,8 @@ const SLIDES = [
   },
   {
     src: "/images/hero/hero-3.jpg",
-    alt: "야외에 모여 있는 많은 아이들",
-    objectPosition: "center 40%",
+    alt: "교실에서 수업에 참여하는 아이들",
+    objectPosition: "center 55%",
     title: "교육으로 미래를 열어가겠습니다",
     desc: "아이 한 명의 성장이 공동체 전체를 밝게 합니다",
   },

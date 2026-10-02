@@ -2,35 +2,49 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MAIN_NAV } from "@/lib/constants/nav";
 import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
+    const pointer = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)");
+    const onMove = (event: MouseEvent) => {
+      if (!pointer.matches || window.scrollY <= 84) {
+        setRevealed(false);
+        return;
+      }
+      setRevealed((visible) => event.clientY <= (visible ? 84 : 16));
+    };
+    const onScroll = () => { if (window.scrollY <= 84) setRevealed(false); };
+    const onLeave = () => setRevealed(false);
+    window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("mouseleave", onLeave);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("mouseleave", onLeave);
+    };
   }, []);
-
-  const transparent = isHome && !scrolled;
+  const transparent = isHome && !revealed;
 
   return (
+    <div className={revealed ? "h-[84px]" : undefined}>
     <header
-      className={`sticky top-0 z-40 transition-colors duration-300 ${
+      className={`${revealed ? "fixed inset-x-0 top-0 shadow-md" : "relative"} z-40 transition-colors duration-300 ${
         transparent
           ? "border-transparent bg-transparent"
           : "border-b border-border/80 bg-cream/95 backdrop-blur"
       }`}
     >
       <div className="section-wrap flex h-[84px] items-center justify-between">
-        <Link href="/" className="flex items-center flex-shrink-0" onClick={() => setOpen(false)}>
+        <Link href="/" className="flex items-center flex-shrink-0" onClick={() => { setOpen(false); setRevealed(false); }}>
           <Logo
             size="header"
             className="hidden md:inline-flex"
@@ -109,7 +123,7 @@ export function Header() {
                         ? "text-cream hover:text-gold"
                         : "text-navy hover:text-gold-dark"
                     }`}
-                    onClick={() => setOpen(false)}
+                    onClick={() => { setOpen(false); setRevealed(false); }}
                   >
                     {item.label}
                   </Link>
@@ -120,5 +134,6 @@ export function Header() {
         </nav>
       )}
     </header>
+    </div>
   );
 }
