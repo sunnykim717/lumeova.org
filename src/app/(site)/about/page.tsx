@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Logo } from "@/components/ui/Logo";
+import { SiteStats } from "@/components/home/SiteStats";
 import { ORG } from "@/lib/constants/brand";
 
 export const metadata: Metadata = {
@@ -77,6 +78,8 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+
+      <SiteStats />
 
       {/* ── 연혁 ── */}
       <section className="section-wrap pb-16 md:pb-20">

@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { upsertProject } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/Button";
+import { PROJECT_TEMPLATES, suggestSlug } from "@/lib/admin/contentTemplates";
 import type { ContentStatus, Project } from "@/lib/types/database";
 
 export function ProjectForm({ project }: { project?: Project }) {
@@ -19,6 +20,14 @@ export function ProjectForm({ project }: { project?: Project }) {
   const [startDate, setStartDate] = useState(project?.start_date ?? "");
   const [endDate, setEndDate] = useState(project?.end_date ?? "");
   const [status, setStatus] = useState<ContentStatus>(project?.status ?? "draft");
+  const [consentChecked, setConsentChecked] = useState(Boolean(project?.consent_confirmed_at));
+  const [template, setTemplate] = useState<keyof typeof PROJECT_TEMPLATES>("blank");
+
+  function applyTemplate(key: keyof typeof PROJECT_TEMPLATES) {
+    setTemplate(key);
+    // A template only fills an empty body, so it never overwrites text.
+    if (!content.trim()) setContent(PROJECT_TEMPLATES[key].body);
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,6 +44,7 @@ export function ProjectForm({ project }: { project?: Project }) {
           start_date: startDate,
           end_date: endDate,
           status,
+          consentChecked,
         });
         router.push("/admin/projects");
       } catch (err) {
@@ -47,6 +57,23 @@ export function ProjectForm({ project }: { project?: Project }) {
     <form onSubmit={handleSubmit} className="space-y-5 max-w-2xl">
       {error && (
         <p className="text-[13px] text-red-700 bg-red-50 border border-red-200 rounded-sm px-4 py-3">{error}</p>
+      )}
+
+      {!project && (
+        <div>
+          <label className="block text-[13px] text-muted mb-1.5">시작 틀</label>
+          <select
+            value={template}
+            onChange={(e) => applyTemplate(e.target.value as keyof typeof PROJECT_TEMPLATES)}
+            className="rounded-sm border border-border px-3.5 py-2.5 text-[14px]"
+          >
+            {Object.entries(PROJECT_TEMPLATES).map(([key, t]) => (
+              <option key={key} value={key}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </div>
       )}
 
       <div className="grid sm:grid-cols-2 gap-4">
@@ -68,6 +95,15 @@ export function ProjectForm({ project }: { project?: Project }) {
             pattern="[a-z0-9\-]+"
             className="w-full rounded-sm border border-border px-3.5 py-2.5 text-[14px]"
           />
+          {!project && (
+            <button
+              type="button"
+              onClick={() => setSlug(suggestSlug(title, new Date().toISOString().slice(0, 10)))}
+              className="mt-1.5 text-[12px] text-navy underline underline-offset-4"
+            >
+              제목으로 제안 (영문이 없으면 날짜)
+            </button>
+          )}
         </div>
       </div>
 
@@ -131,6 +167,16 @@ export function ProjectForm({ project }: { project?: Project }) {
           <option value="hidden">숨김</option>
         </select>
       </div>
+
+      <label className="flex items-start gap-2 text-[13px] text-ink">
+        <input
+          type="checkbox"
+          checked={consentChecked}
+          onChange={(e) => setConsentChecked(e.target.checked)}
+          className="mt-0.5"
+        />
+        <span>사진·실명 게시에 동의를 받았거나, 해당 사항이 없습니다. (게시 상태로 저장하려면 필수)</span>
+      </label>
 
       <Button type="submit" disabled={isPending}>
         {isPending ? "저장 중..." : "저장"}

@@ -5,6 +5,7 @@ import { WhatWeDo } from "@/components/home/WhatWeDo";
 import { RecentProjects } from "@/components/home/RecentProjects";
 import { RecentNews } from "@/components/home/RecentNews";
 import { GetInvolved } from "@/components/home/GetInvolved";
+import { SiteStats } from "@/components/home/SiteStats";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <BrandMessage />
       <AboutSummary />
+      <SiteStats />
       <WhatWeDo />
       <RecentProjects />
       <RecentNews />

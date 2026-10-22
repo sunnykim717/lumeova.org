@@ -58,8 +58,16 @@ See `.env.example`. Only `NEXT_PUBLIC_SUPABASE_URL` and
 `NEXT_PUBLIC_SUPABASE_ANON_KEY` are needed to run this app — the anon key is
 safe to expose client-side, and every privileged admin action is authorized
 by Postgres RLS using the signed-in admin's own session, not a service-role
-key. `SUPABASE_SERVICE_ROLE_KEY` must never be committed or exposed to the
-browser if it's ever added.
+key. The one exception is the scheduled news sync, which runs without an
+admin session and uses `SUPABASE_SERVICE_ROLE_KEY` from the server environment
+only. See `docs/superpowers/specs/2026-10-21-admin-automation-and-site-content-design.md`
+§6.1.5. `SUPABASE_SERVICE_ROLE_KEY` must never be committed or exposed to the
+browser.
+
+Scheduled news sync: set `NEWS_SHEET_CSV_URL`, `CRON_SECRET` and
+`SUPABASE_SERVICE_ROLE_KEY` on the server. In GitHub, set the `CRON_SECRET`
+secret and the `SITE_URL` variable. `.github/workflows/sync-news.yml` then
+runs daily.
 
 ## Project structure
 

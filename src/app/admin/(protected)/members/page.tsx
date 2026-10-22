@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { maskEmail, maskPhone } from "@/lib/utils/mask";
-import { MemberActions } from "@/components/admin/MemberActions";
+import { evaluateMembership, loadReviewInputs, type MembershipForReview } from "@/lib/admin/memberReview";
+import { MemberTable, type MemberRow } from "@/components/admin/MemberTable";
 import type { MembershipStatus } from "@/lib/types/database";
 
 const STATUS_LABEL: Record<MembershipStatus, string> = {
@@ -53,6 +54,27 @@ export default async function AdminMembersPage({ searchParams }: Props) {
 
   const supporterMap = new Map((supporters ?? []).map((s) => [s.id, s]));
 
+  const list = memberships ?? [];
+  const reviewInputs = await loadReviewInputs(supabase, list as MembershipForReview[]);
+
+  const rows: MemberRow[] = list.map((m) => {
+    const supporter = supporterMap.get(m.supporter_id);
+    const input = reviewInputs.get(m.id);
+    const review = input ? evaluateMembership(input) : { checks: [], bulkEligible: false };
+    return {
+      id: m.id,
+      name: supporter?.name ?? "-",
+      phone: maskPhone(supporter?.phone ?? null),
+      email: maskEmail(supporter?.email ?? null),
+      typeLabel: m.membership_type === "regular" ? "정회원" : "일반회원",
+      status: m.status,
+      statusLabel: STATUS_LABEL[m.status],
+      createdAt: formatDate(m.created_at),
+      checks: review.checks,
+      bulkEligible: review.bulkEligible,
+    };
+  });
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -81,61 +103,7 @@ export default async function AdminMembersPage({ searchParams }: Props) {
         ))}
       </div>
 
-      <div className="rounded-sm border border-navy/10 bg-white overflow-x-auto">
-        <table className="w-full text-[13.5px]">
-          <thead>
-            <tr className="border-b border-navy/10 text-left text-muted text-[12px]">
-              <th className="px-4 py-3 font-medium">이름</th>
-              <th className="px-4 py-3 font-medium">연락처</th>
-              <th className="px-4 py-3 font-medium">이메일</th>
-              <th className="px-4 py-3 font-medium">유형</th>
-              <th className="px-4 py-3 font-medium">상태</th>
-              <th className="px-4 py-3 font-medium">신청일</th>
-              <th className="px-4 py-3 font-medium">처리</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(memberships ?? []).length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-muted">
-                  해당하는 회원이 없습니다.
-                </td>
-              </tr>
-            ) : (
-              (memberships ?? []).map((m) => {
-                const supporter = supporterMap.get(m.supporter_id);
-                return (
-                  <tr key={m.id} className="border-b border-navy/5 last:border-0">
-                    <td className="px-4 py-3 text-ink font-medium">{supporter?.name ?? "-"}</td>
-                    <td className="px-4 py-3 text-muted tabular-nums">{maskPhone(supporter?.phone ?? null)}</td>
-                    <td className="px-4 py-3 text-muted">{maskEmail(supporter?.email ?? null)}</td>
-                    <td className="px-4 py-3 text-muted">
-                      {m.membership_type === "regular" ? "정회원" : "일반회원"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`text-[11.5px] px-2 py-0.5 rounded-full ${
-                          m.status === "pending"
-                            ? "bg-gold/20 text-gold-dark"
-                            : m.status === "approved"
-                              ? "bg-sage text-navy"
-                              : "bg-navy/5 text-muted"
-                        }`}
-                      >
-                        {STATUS_LABEL[m.status]}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-muted tabular-nums">{formatDate(m.created_at)}</td>
-                    <td className="px-4 py-3">
-                      <MemberActions membershipId={m.id} status={m.status} />
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+      <MemberTable rows={rows} emptyLabel="해당하는 회원이 없습니다." />
     </div>
   );
 }

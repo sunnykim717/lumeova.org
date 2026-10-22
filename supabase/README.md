@@ -15,6 +15,11 @@ duplicate_object$$`) so it's safe to run more than once, but it does **not**
 touch or drop any table this project didn't create. Review it before running
 it against a project that has other, unrelated tables.
 
+Then run `migrations/0002_admin_automation.sql` the same way. It is additive
+and does not change anything from 0001. It adds bank deposit matching,
+news sheet-sync columns, and aggregate-only public statistics. Run 0001
+first.
+
 ## 2. Create the first admin user
 
 There is intentionally no public sign-up path into `admin_users` — RLS only

@@ -13,7 +13,7 @@ export default async function AdminNewsPage() {
   const supabase = await createClient();
   const { data: news } = await supabase
     .from("news")
-    .select("id, title, slug, status, updated_at")
+    .select("id, title, slug, status, source, admin_locked, updated_at")
     .order("updated_at", { ascending: false });
 
   return (
@@ -48,7 +48,14 @@ export default async function AdminNewsPage() {
             ) : (
               (news ?? []).map((n) => (
                 <tr key={n.id} className="border-b border-navy/5 last:border-0">
-                  <td className="px-4 py-3 text-ink font-medium">{n.title}</td>
+                  <td className="px-4 py-3 text-ink font-medium">
+                    {n.title}
+                    {n.source === "sheet" && (
+                      <span className="ml-2 text-[11px] px-1.5 py-0.5 rounded-sm bg-sage text-navy font-normal">
+                        시트{n.admin_locked ? " · 잠금" : ""}
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-muted">{n.slug}</td>
                   <td className="px-4 py-3 text-muted">{STATUS_LABEL[n.status]}</td>
                   <td className="px-4 py-3">

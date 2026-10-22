@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import type { MembershipStatus, PaymentStatus, ContentStatus } from "@/lib/types/database";
+import { loadReviewInputs, evaluateMembership, type MembershipForReview } from "@/lib/admin/memberReview";
+import type { Database, MembershipStatus, PaymentStatus, ContentStatus } from "@/lib/types/database";
 
 /**
  * All mutations here go through the anon-key server client — i.e. the
@@ -12,7 +14,12 @@ import type { MembershipStatus, PaymentStatus, ContentStatus } from "@/lib/types
  * session isn't an admin, every one of these calls fails at the database.
  */
 
-async function logAction(action: string, targetType: string, targetId: string) {
+async function logAction(
+  action: string,
+  targetType: string,
+  targetId: string,
+  metadata?: Record<string, unknown>,
+) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -23,6 +30,7 @@ async function logAction(action: string, targetType: string, targetId: string) {
     action,
     target_type: targetType,
     target_id: targetId,
+    metadata: metadata ?? null,
   });
 }
 
@@ -45,6 +53,66 @@ export async function updateMembershipStatus(membershipId: string, status: Membe
 
   await logAction(`membership_${status}`, "membership", membershipId);
   revalidatePath("/admin/members");
+}
+
+/**
+ * Approves general (일반회원) applications whose review checks all pass.
+ * The checks are recomputed here from the database, so the client's
+ * selection is never trusted. Regular membership is not eligible.
+ */
+export async function bulkApproveGeneralMembers(
+  membershipIds: string[],
+): Promise<{ approved: number; skipped: { id: string; reason: string }[] }> {
+  const ids = z.array(z.uuid()).min(1).max(200).parse(membershipIds);
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("관리자 로그인이 필요합니다.");
+
+  const { data: rows, error } = await supabase
+    .from("memberships")
+    .select("id, supporter_id, membership_type, status")
+    .in("id", ids);
+  if (error) throw new Error(error.message);
+
+  const memberships = (rows ?? []) as MembershipForReview[];
+  const inputs = await loadReviewInputs(supabase, memberships);
+
+  const skipped: { id: string; reason: string }[] = [];
+  const approvedIds: string[] = [];
+  for (const id of ids) {
+    const m = memberships.find((x) => x.id === id);
+    const input = inputs.get(id);
+    if (!m || !input) {
+      skipped.push({ id, reason: "찾을 수 없음" });
+      continue;
+    }
+    const { bulkEligible, checks } = evaluateMembership(input);
+    if (!bulkEligible) {
+      const failed = checks.filter((c) => !c.ok).map((c) => c.label);
+      skipped.push({
+        id,
+        reason: m.membership_type === "regular" ? "정회원은 한 건씩 승인" : failed.join(", ") || "대상 아님",
+      });
+      continue;
+    }
+
+    const { error: updateError } = await supabase
+      .from("memberships")
+      .update({ status: "approved", approved_at: new Date().toISOString(), approved_by: user.id })
+      .eq("id", id);
+    if (updateError) {
+      skipped.push({ id, reason: updateError.message });
+      continue;
+    }
+    approvedIds.push(id);
+    await logAction("membership_approved", "membership", id, { bulk: true });
+  }
+
+  if (approvedIds.length > 0) revalidatePath("/admin/members");
+  return { approved: approvedIds.length, skipped };
 }
 
 export async function recordDonationPayment(input: {
@@ -101,10 +169,14 @@ type ProjectInput = {
   start_date: string;
   end_date: string;
   status: ContentStatus;
+  consentChecked: boolean;
 };
 
 export async function upsertProject(input: ProjectInput) {
   const supabase = await createClient();
+  if (input.status === "published" && !input.consentChecked) {
+    throw new Error("게시하려면 사진·실명 게시 동의를 확인해 주세요.");
+  }
   const row = {
     title: input.title,
     slug: input.slug,
@@ -114,6 +186,7 @@ export async function upsertProject(input: ProjectInput) {
     start_date: input.start_date || null,
     end_date: input.end_date || null,
     status: input.status,
+    consent_confirmed_at: input.consentChecked ? new Date().toISOString() : null,
   };
 
   if (input.id) {
@@ -148,11 +221,15 @@ type NewsInput = {
   content: string;
   status: ContentStatus;
   published_at: string;
+  consentChecked: boolean;
 };
 
 export async function upsertNews(input: NewsInput) {
   const supabase = await createClient();
-  const row = {
+  if (input.status === "published" && !input.consentChecked) {
+    throw new Error("게시하려면 사진·실명 게시 동의를 확인해 주세요.");
+  }
+  const row: Database["public"]["Tables"]["news"]["Insert"] = {
     title: input.title,
     slug: input.slug,
     category: input.category || null,
@@ -160,9 +237,20 @@ export async function upsertNews(input: NewsInput) {
     content: input.content || null,
     status: input.status,
     published_at: input.published_at || null,
+    consent_confirmed_at: input.consentChecked ? new Date().toISOString() : null,
   };
 
   if (input.id) {
+    // Editing a sheet-sourced row locks it, so the next sheet sync leaves
+    // the admin's version alone (design §6.1.3).
+    const { data: existing, error: readError } = await supabase
+      .from("news")
+      .select("source")
+      .eq("id", input.id)
+      .single();
+    if (readError) throw new Error(readError.message);
+    if (existing.source === "sheet") row.admin_locked = true;
+
     const { error } = await supabase.from("news").update(row).eq("id", input.id);
     if (error) throw new Error(error.message);
     await logAction("news_updated", "news", input.id);
@@ -174,6 +262,37 @@ export async function upsertNews(input: NewsInput) {
 
   revalidatePath("/admin/news");
   revalidatePath("/news");
+}
+
+/** Recomputes aggregates (refresh_site_stats checks is_admin itself). */
+export async function refreshSiteStats() {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("refresh_site_stats");
+  if (error) throw new Error(error.message);
+  await logAction("site_stats_refreshed", "site_stats", "all");
+  revalidatePath("/admin/dashboard");
+  revalidatePath("/");
+  revalidatePath("/about");
+}
+
+/** Hides one public statistic. The hidden flag survives refreshes. */
+export async function setStatHidden(key: string, hidden: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("site_stats").update({ admin_hidden: hidden }).eq("key", key);
+  if (error) throw new Error(error.message);
+  await logAction(hidden ? "site_stat_hidden" : "site_stat_shown", "site_stats", key);
+  revalidatePath("/admin/dashboard");
+  revalidatePath("/");
+  revalidatePath("/about");
+}
+
+/** Unlocking lets the next sheet sync overwrite the row again. */
+export async function setNewsSyncLock(id: string, locked: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("news").update({ admin_locked: locked }).eq("id", id).eq("source", "sheet");
+  if (error) throw new Error(error.message);
+  await logAction(locked ? "news_sync_locked" : "news_sync_unlocked", "news", id);
+  revalidatePath("/admin/news");
 }
 
 export async function deleteNews(id: string) {

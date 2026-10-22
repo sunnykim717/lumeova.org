@@ -1,5 +1,26 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { SiteStatsPanel, type StatRow } from "@/components/admin/SiteStatsPanel";
+
+function formatStat(key: string, value: number): string {
+  if (key === "confirmed_total") return `${value.toLocaleString("ko-KR")}원 이상`;
+  if (key === "published_news") return `${value.toLocaleString("ko-KR")}건`;
+  return `${value.toLocaleString("ko-KR")}명`;
+}
+
+async function getStats(): Promise<StatRow[]> {
+  const supabase = await createClient();
+  // Admins can read every row, including hidden ones (site_stats RLS).
+  const { data } = await supabase.from("site_stats").select("key, label, value, visible, admin_hidden, as_of").order("key");
+  return (data ?? []).map((s) => ({
+    key: s.key,
+    label: s.label,
+    display: formatStat(s.key, s.value),
+    visible: s.visible,
+    adminHidden: s.admin_hidden,
+    asOf: new Date(s.as_of).toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" }),
+  }));
+}
 
 async function getCounts() {
   const supabase = await createClient();
@@ -24,7 +45,7 @@ async function getCounts() {
 }
 
 export default async function AdminDashboardPage() {
-  const counts = await getCounts();
+  const [counts, stats] = await Promise.all([getCounts(), getStats()]);
 
   const cards = [
     { label: "승인 대기 회원", value: counts.pendingMembers, href: "/admin/members?status=pending" },
@@ -47,6 +68,10 @@ export default async function AdminDashboardPage() {
             <p className="font-display text-[30px] text-navy tabular-nums">{card.value}</p>
           </Link>
         ))}
+      </div>
+
+      <div className="mt-10">
+        <SiteStatsPanel stats={stats} />
       </div>
 
       <div className="mt-10 rounded-sm border border-navy/10 bg-white p-6">

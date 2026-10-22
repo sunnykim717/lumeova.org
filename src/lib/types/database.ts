@@ -115,6 +115,62 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["donation_payments"]["Row"]>;
         Relationships: [];
       };
+      bank_transactions: {
+        Row: {
+          id: string;
+          transacted_at: string;
+          amount: number;
+          counterparty_name: string | null;
+          memo: string | null;
+          dedupe_key: string;
+          matched_payment_id: string | null;
+          imported_by: string | null;
+          imported_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["bank_transactions"]["Row"]> & {
+          transacted_at: string;
+          amount: number;
+          dedupe_key: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["bank_transactions"]["Row"]>;
+        Relationships: [];
+      };
+      sync_runs: {
+        Row: {
+          id: string;
+          source: string;
+          started_at: string;
+          finished_at: string | null;
+          status: "running" | "ok" | "partial" | "failed";
+          added: number;
+          updated: number;
+          skipped: number;
+          report: Record<string, unknown>;
+        };
+        Insert: Partial<Database["public"]["Tables"]["sync_runs"]["Row"]> & {
+          source: string;
+          status: "running" | "ok" | "partial" | "failed";
+        };
+        Update: Partial<Database["public"]["Tables"]["sync_runs"]["Row"]>;
+        Relationships: [];
+      };
+      site_stats: {
+        Row: {
+          key: string;
+          label: string;
+          value: number;
+          visible: boolean;
+          admin_hidden: boolean;
+          as_of: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["site_stats"]["Row"]> & {
+          key: string;
+          label: string;
+          value: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["site_stats"]["Row"]>;
+        Relationships: [];
+      };
       privacy_consents: {
         Row: {
           id: string;
@@ -174,6 +230,7 @@ export interface Database {
           status: ContentStatus;
           thumbnail: string | null;
           images: string[];
+          consent_confirmed_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -195,6 +252,11 @@ export interface Database {
           thumbnail: string | null;
           published_at: string | null;
           status: ContentStatus;
+          external_id: string | null;
+          source: "manual" | "sheet";
+          source_synced_at: string | null;
+          admin_locked: boolean;
+          consent_confirmed_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -216,6 +278,14 @@ export interface Database {
         Args: Record<string, never>;
         Returns: AdminRole | null;
       };
+      confirm_bank_matches: {
+        Args: { p_matches: { transaction_id: string; donation_id: string; note?: string }[] };
+        Returns: number;
+      };
+      refresh_site_stats: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
     };
   };
 }
@@ -226,3 +296,5 @@ export type Supporter = Database["public"]["Tables"]["supporters"]["Row"];
 export type Membership = Database["public"]["Tables"]["memberships"]["Row"];
 export type Donation = Database["public"]["Tables"]["donations"]["Row"];
 export type DonationPayment = Database["public"]["Tables"]["donation_payments"]["Row"];
+export type BankTransaction = Database["public"]["Tables"]["bank_transactions"]["Row"];
+export type SiteStat = Database["public"]["Tables"]["site_stats"]["Row"];

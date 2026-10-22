@@ -18,13 +18,31 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" });
 }
 
-export default async function AdminDonationsPage() {
+type Props = {
+  searchParams: Promise<{ filter?: string }>;
+};
+
+export default async function AdminDonationsPage({ searchParams }: Props) {
+  const { filter } = await searchParams;
   const supabase = await createClient();
 
-  const { data: donations } = await supabase
+  const { data: allDonations } = await supabase
     .from("donations")
     .select("id, supporter_id, donation_type, amount, status, created_at")
     .order("created_at", { ascending: false });
+
+  const { data: confirmedRows } = await supabase
+    .from("donation_payments")
+    .select("donation_id")
+    .eq("status", "confirmed");
+  const confirmedIds = new Set((confirmedRows ?? []).map((p) => p.donation_id));
+
+  // ?filter=unconfirmed: active donations with no confirmed payment (the
+  // dashboard's "입금 미확인 후원" card links here).
+  const donations =
+    filter === "unconfirmed"
+      ? (allDonations ?? []).filter((d) => d.status === "active" && !confirmedIds.has(d.id))
+      : allDonations;
 
   const supporterIds = [...new Set((donations ?? []).map((d) => d.supporter_id))];
   const donationIds = (donations ?? []).map((d) => d.id);
@@ -61,13 +79,23 @@ export default async function AdminDonationsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-[24px] text-navy">후원</h1>
-        <Link
-          href="/admin/donations/export"
-          className="text-[13px] px-4 py-2 rounded-sm border border-navy/20 text-navy hover:border-navy/40"
-        >
-          CSV 내보내기
-        </Link>
+        <h1 className="font-display text-[24px] text-navy">
+          후원{filter === "unconfirmed" && <span className="text-[14px] text-muted ml-3">입금 미확인만</span>}
+        </h1>
+        <div className="flex gap-2">
+          <Link
+            href="/admin/donations/import"
+            className="text-[13px] px-4 py-2 rounded-sm bg-navy text-cream hover:bg-navy-light"
+          >
+            입금 대조
+          </Link>
+          <Link
+            href="/admin/donations/export"
+            className="text-[13px] px-4 py-2 rounded-sm border border-navy/20 text-navy hover:border-navy/40"
+          >
+            CSV 내보내기
+          </Link>
+        </div>
       </div>
 
       <div className="rounded-sm border border-navy/10 bg-white overflow-x-auto">

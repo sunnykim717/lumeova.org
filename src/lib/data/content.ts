@@ -45,6 +45,25 @@ export async function getRecentNews(limit = 3): Promise<NewsItem[]> {
   }
 }
 
+export type PublicStat = { key: string; value: number; asOf: string };
+
+/**
+ * Aggregate statistics only. The public site never reads supporters,
+ * memberships or donations directly. RLS on site_stats returns only rows
+ * that are visible and not hidden by an admin.
+ */
+export async function getPublicStats(): Promise<PublicStat[]> {
+  if (!supabaseConfigured()) return [];
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.from("site_stats").select("key, value, as_of").order("key");
+    if (error) throw error;
+    return (data ?? []).map((s) => ({ key: s.key, value: Number(s.value), asOf: s.as_of }));
+  } catch {
+    return [];
+  }
+}
+
 export async function getAllProjects(): Promise<Project[]> {
   if (!supabaseConfigured()) return [];
   try {

@@ -1,0 +1,35 @@
+# Daily news sync from the published sheet (design §6.1.4).
+# Requires repository secret CRON_SECRET (must match the server's CRON_SECRET)
+# and repository variable SITE_URL (for example https://lumeova.org).
+name: Sync news from sheet
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # 09:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call sync endpoint
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "$SITE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "SITE_URL variable or CRON_SECRET secret is missing" >&2
+            exit 1
+          fi
+          # -sS hides the body on success so the secret never appears in logs.
+          curl -sS --fail-with-body \
+            -X POST "$SITE_URL/api/cron/sync-news" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -H "Content-Type: application/json" \
+            -o response.json
+          cat response.json
