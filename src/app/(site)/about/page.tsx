@@ -27,6 +27,25 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── 사람 중심 메시지 ── */}
+      <section className="section-wrap py-16 md:py-20">
+        <div className="max-w-3xl">
+          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
+            {ORG.statement.eyebrow}
+          </p>
+          <h2 className="font-display text-[26px] md:text-[30px] text-navy mb-8">{ORG.statement.title}</h2>
+          {ORG.statement.paragraphs.map((text, i) => (
+            <p key={i} className="text-[15px] text-muted leading-relaxed mb-5">
+              {text}
+            </p>
+          ))}
+          <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65] my-8 border-l-2 border-gold pl-5">
+            {ORG.statement.closing}
+          </p>
+          <p className="text-[15px] text-muted leading-relaxed">{ORG.statement.final}</p>
+        </div>
+      </section>
+
       {/* ── Mission · Vision ── */}
       <section className="bg-sage/50 py-16 md:py-20">
         <div className="section-wrap grid md:grid-cols-2 gap-12">
