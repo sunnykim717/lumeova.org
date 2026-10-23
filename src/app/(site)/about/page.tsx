@@ -27,6 +27,39 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── 사람 중심 메시지 ── */}
+      <section className="section-wrap py-16 md:py-20">
+        <div className="max-w-3xl">
+          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
+            {ORG.statement.eyebrow}
+          </p>
+          <h2 className="font-display text-[26px] md:text-[30px] text-navy mb-8">{ORG.statement.title}</h2>
+          {ORG.statement.paragraphs.map((text, i) => (
+            <p key={i} className="text-[15px] text-muted leading-relaxed mb-5">
+              {text}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 루메오바의 철학 ── */}
+      <section className="bg-cream py-16 md:py-20">
+        <div className="section-wrap max-w-3xl">
+          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">Philosophy</p>
+          <h2 className="font-display text-[26px] md:text-[30px] text-navy mb-8">{ORG.philosophy.heading}</h2>
+          {ORG.philosophy.paragraphs.map((text, i) => (
+            <p
+              key={i}
+              className={`font-display text-[19px] md:text-[22px] text-navy leading-[1.65] border-l-2 border-gold pl-5 ${
+                i > 0 ? "mt-6" : ""
+              }`}
+            >
+              {text}
+            </p>
+          ))}
+        </div>
+      </section>
+
       {/* ── Mission · Vision ── */}
       <section className="bg-sage/50 py-16 md:py-20">
         <div className="section-wrap grid md:grid-cols-2 gap-12">

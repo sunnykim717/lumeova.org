@@ -28,30 +28,64 @@ export const ORG = {
   // These exact strings are used in about/page.tsx and any other component that
   // displays them. Edit here only; do NOT duplicate these in page files.
   mission:
-    "교육을 통해 한 사람이 자신의 가능성을 발견하고, 스스로 선택하며 미래를 만들어 갈 수 있는 기회를 넓혀갑니다.",
+    "사람을 중심에 두고, 현지 주민과 함께 필요한 변화를 만들어 지역사회와 국가의 지속가능한 발전에 기여합니다.",
   vision:
-    "배움의 기회가 환경과 지역의 한계를 넘어 누구에게나 새로운 가능성으로 이어지는 사회를 만들어갑니다.",
+    "모든 사람이 존중받고 행복하게 살아가며, 스스로 만들어 낸 변화가 지역사회와 국가의 미래를 밝히는 세상.",
+  // § 단체 소개 — 사람 중심 메시지 (about page, before Mission · Vision)
+  statement: {
+    eyebrow: "미래를여는빛 | LUMEOVA International",
+    title: "사람이 먼저, 사람이 중심인 세상",
+    paragraphs: [
+      "미래를여는빛(LUMEOVA International)은 사람을 소중히 여기고, 모든 사람이 서로 존중하며 행복하게 살아갈 수 있는 세상을 만들기 위해 설립된 비영리단체입니다.",
+      "우리는 단체의 존재나 사업의 확대 자체를 목적으로 삼지 않습니다. 모든 활동의 출발점은 사람이며, 그 중심에도 언제나 사람이 있어야 한다고 믿습니다.",
+      "사람은 누구나 존중받아야 하며, 자신이 살아가는 사회에서 행복을 추구하고 더 나은 미래를 만들어 갈 수 있어야 합니다. 그러나 국가와 지역에 따라 교육과 자원, 사회적 기회의 차이가 존재하며, 이러한 차이는 개인의 삶뿐 아니라 지역사회와 국가의 발전에도 영향을 미칩니다.",
+      "미래를여는빛은 다양한 국가에서 축적한 현장 경험을 바탕으로, 전문성을 갖춘 활동가들이 현지 주민들과 함께 그 사회에 필요한 변화를 만들어 가고자 합니다.",
+      "우리는 외부의 시각으로 문제를 규정하거나 일방적으로 해결책을 제시하지 않습니다. 현지의 문화와 사회적 환경을 이해하고, 그곳에서 살아가는 사람들의 경험과 의견을 존중하며, 주민들과 함께 필요한 사업을 기획하고 실행합니다.",
+      "교육과 역량 강화, 지역사회 협력 등 다양한 활동은 이러한 변화를 만들어 가는 수단입니다. 중요한 것은 사업의 종류나 규모가 아니라, 그 활동이 사람들의 삶에 실질적인 도움이 되고 지역사회에 지속적인 변화를 남기는가 하는 점입니다.",
+      "우리는 한 사람의 행복과 성장이 가족과 이웃의 변화로 이어지고, 지역사회가 스스로 문제를 해결할 수 있는 힘을 키우며, 궁극적으로는 그 나라의 지속가능한 발전에 기여하기를 바랍니다.",
+    ],
+  },
+  // § 루메오바의 철학 (about page, between the statement and Mission · Vision)
+  philosophy: {
+    heading: "루메오바의 철학",
+    paragraphs: [
+      "우리는 사람을 위해 사업을 만들지, 사업을 위해 사람을 찾지 않습니다.",
+      "사람의 행복에서 시작된 변화가 지역사회를 성장시키고, 나아가 국가의 미래를 밝힐 수 있도록 현지 주민들과 함께 생각하고 행동합니다.",
+    ],
+  },
 
   // § Core Values — typography-only, no icons (Section 3)
   // Rendered as spaced text + subtle dividers; no card/icon UI.
   coreValues: [
     {
-      id: "opportunity",
-      titleKo: "빛",
-      titleEn: "Opportunity",
-      body: "교육을 통해 새로운 선택과 가능성의 출발점을 만듭니다.",
-    },
-    {
       id: "people",
-      titleKo: "사람",
-      titleEn: "People",
-      body: "사업보다 사람을 먼저 보고, 현장의 목소리에서 시작합니다.",
+      titleKo: "사람 중심",
+      titleEn: "People First",
+      body: "모든 사업과 활동의 중심에는 사람이 있습니다. 우리는 사업의 규모나 성과보다 사람의 존엄과 행복을 우선하며, 한 사람 한 사람의 삶을 소중히 여깁니다.",
     },
     {
-      id: "trust",
-      titleKo: "신뢰",
-      titleEn: "Trust",
-      body: "확인된 사실을 바탕으로 투명하게 운영하고, 약속한 일을 책임 있게 수행합니다.",
+      id: "respect",
+      titleKo: "존중과 공존",
+      titleEn: "Respect & Inclusion",
+      body: "서로 다른 문화와 환경, 삶의 방식을 존중합니다. 누구도 일방적인 도움의 대상으로 바라보지 않으며, 서로를 동등한 존재로 인정하고 함께 어울려 살아가는 사회를 지향합니다.",
+    },
+    {
+      id: "participation",
+      titleKo: "참여와 협력",
+      titleEn: "Participation & Partnership",
+      body: "현지 주민은 지원의 대상이 아니라 변화를 만들어 가는 주체입니다. 우리는 주민들의 목소리와 경험을 존중하고, 현지 기관 및 지역사회와 함께 필요한 사업을 기획하고 실행합니다.",
+    },
+    {
+      id: "expertise",
+      titleKo: "전문성과 책임",
+      titleEn: "Expertise & Accountability",
+      body: "좋은 의도만으로 지속적인 변화를 만들 수는 없습니다. 우리는 현장 경험과 전문지식을 바탕으로 각 나라의 사회·문화적 환경과 실제 필요에 적합한 사업을 설계하고, 실행 과정과 결과에 책임을 다합니다.",
+    },
+    {
+      id: "sustainability",
+      titleKo: "지속가능한 발전",
+      titleEn: "Sustainable Development",
+      body: "일시적인 지원을 넘어 지역사회에 오래도록 남는 변화를 추구합니다. 현지 주민들이 스스로 문제를 해결하고 미래를 만들어 갈 수 있는 역량을 키워, 그 변화가 지역사회의 성장과 국가의 지속가능한 발전으로 이어지도록 함께합니다.",
     },
   ] as const,
 
