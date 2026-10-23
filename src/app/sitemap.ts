@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/constants/brand";
 import { getAllProjects, getAllNews } from "@/lib/data/content";
+import { getPublishedFieldStories } from "@/lib/data/fieldStories";
 
 const STATIC_PATHS = [
   "",
   "/about",
+  "/about/brand",
   "/what-we-do",
+  "/field-stories",
   "/projects",
   "/news",
   "/membership",
@@ -16,7 +19,11 @@ const STATIC_PATHS = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [projects, news] = await Promise.all([getAllProjects(), getAllNews()]);
+  const [projects, news, stories] = await Promise.all([
+    getAllProjects(),
+    getAllNews(),
+    getPublishedFieldStories(),
+  ]);
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
     url: `${SITE_URL}${path}`,
@@ -33,5 +40,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(n.updated_at),
   }));
 
-  return [...staticEntries, ...projectEntries, ...newsEntries];
+  const storyEntries: MetadataRoute.Sitemap = stories.map((s) => ({
+    url: `${SITE_URL}/field-stories/${s.slug}`,
+    lastModified: new Date(s.updated_at),
+  }));
+
+  return [...staticEntries, ...projectEntries, ...newsEntries, ...storyEntries];
 }
