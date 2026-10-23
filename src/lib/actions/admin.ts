@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { MembershipStatus, PaymentStatus, ContentStatus } from "@/lib/types/database";
 import { sanitizeSection, type SiteContentKey } from "@/lib/constants/siteContent";
+import type { ProjectCategory } from "@/lib/constants/projects";
 
 /**
  * All mutations here go through the anon-key server client — i.e. the
@@ -102,6 +103,7 @@ type ProjectInput = {
   start_date: string;
   end_date: string;
   status: ContentStatus;
+  category: ProjectCategory | "";
 };
 
 export async function upsertProject(input: ProjectInput) {
@@ -115,6 +117,7 @@ export async function upsertProject(input: ProjectInput) {
     start_date: input.start_date || null,
     end_date: input.end_date || null,
     status: input.status,
+    category: input.category || null,
   };
 
   if (input.id) {
