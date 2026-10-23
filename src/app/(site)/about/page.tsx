@@ -65,19 +65,21 @@ export default function AboutPage() {
         <div className="section-wrap grid md:grid-cols-2 gap-12">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-dark mb-3">
-              Mission
+              Mission | 미션
             </p>
             <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65]">
               {ORG.mission}
             </p>
+            <p className="text-[15px] text-muted leading-relaxed mt-5">{ORG.missionBody}</p>
           </div>
           <div>
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-dark mb-3">
-              Vision
+              Vision | 비전
             </p>
             <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65]">
               {ORG.vision}
             </p>
+            <p className="text-[15px] text-muted leading-relaxed mt-5">{ORG.visionBody}</p>
           </div>
         </div>
       </section>

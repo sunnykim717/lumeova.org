@@ -28,9 +28,13 @@ export const ORG = {
   // These exact strings are used in about/page.tsx and any other component that
   // displays them. Edit here only; do NOT duplicate these in page files.
   mission:
-    "사람을 중심에 두고, 현지 주민과 함께 필요한 변화를 만들어 지역사회와 국가의 지속가능한 발전에 기여합니다.",
+    "현장의 목소리와 전문성을 연결하여, 함께 성장하고 더 나은 미래를 만들어 갑니다.",
+  missionBody:
+    "우리는 각 나라의 문화와 환경을 이해하고, 현지 주민들과 함께 실질적으로 필요한 사업을 기획하고 실행합니다. 교육과 협력, 역량 강화를 통해 삶의 질을 높이고 지속적인 발전의 기반을 마련합니다.",
   vision:
-    "모든 사람이 존중받고 행복하게 살아가며, 스스로 만들어 낸 변화가 지역사회와 국가의 미래를 밝히는 세상.",
+    "모두의 존엄과 행복이 존중받고, 함께 이룬 성장이 지역과 국가의 발전으로 이어지는 세상.",
+  visionBody:
+    "우리는 개인의 가능성이 공동체의 역량으로 이어지고, 그 성과가 사회 전반에 확산되는 미래를 지향합니다.",
   // § 단체 소개 — 사람 중심 메시지 (about page, before Mission · Vision)
   statement: {
     eyebrow: "미래를여는빛 | LUMEOVA International",
@@ -47,10 +51,11 @@ export const ORG = {
   },
   // § 루메오바의 철학 (about page, between the statement and Mission · Vision)
   philosophy: {
-    heading: "루메오바의 철학",
+    heading: "우리의 철학",
     paragraphs: [
-      "우리는 사람을 위해 사업을 만들지, 사업을 위해 사람을 찾지 않습니다.",
-      "사람의 행복에서 시작된 변화가 지역사회를 성장시키고, 나아가 국가의 미래를 밝힐 수 있도록 현지 주민들과 함께 생각하고 행동합니다.",
+      "사람을 위한 사업, 현장과 함께하는 실천.",
+      "미래를여는빛은 사업의 규모보다 삶에 남기는 가치를 중요하게 생각합니다. 서로의 경험과 지혜를 나누고, 각 지역의 현실에 맞는 해법을 함께 찾아갑니다.",
+      "한 사람의 행복에서 시작된 성장이 공동체를 변화시키고, 나아가 국가의 미래를 밝힐 수 있다고 믿습니다.",
     ],
   },
 
@@ -58,34 +63,34 @@ export const ORG = {
   // Rendered as spaced text + subtle dividers; no card/icon UI.
   coreValues: [
     {
-      id: "people",
-      titleKo: "사람 중심",
-      titleEn: "People First",
-      body: "모든 사업과 활동의 중심에는 사람이 있습니다. 우리는 사업의 규모나 성과보다 사람의 존엄과 행복을 우선하며, 한 사람 한 사람의 삶을 소중히 여깁니다.",
+      id: "human_dignity",
+      titleKo: "인간 존중",
+      titleEn: "Human Dignity",
+      body: "모든 활동의 출발점은 인간의 존엄과 행복입니다. 문화와 환경, 경제적 여건의 차이를 넘어 누구나 존중받으며 자신의 가능성을 펼칠 수 있어야 합니다.",
     },
     {
-      id: "respect",
-      titleKo: "존중과 공존",
-      titleEn: "Respect & Inclusion",
-      body: "서로 다른 문화와 환경, 삶의 방식을 존중합니다. 누구도 일방적인 도움의 대상으로 바라보지 않으며, 서로를 동등한 존재로 인정하고 함께 어울려 살아가는 사회를 지향합니다.",
+      id: "local_ownership",
+      titleKo: "현장 중심",
+      titleEn: "Local Ownership",
+      body: "각 지역의 문화와 사회적 환경을 이해하고, 주민의 경험과 의견을 사업의 출발점으로 삼습니다. 외부에서 정한 해답보다 현지에서 발견한 필요와 우선순위를 존중합니다.",
     },
     {
-      id: "participation",
-      titleKo: "참여와 협력",
-      titleEn: "Participation & Partnership",
-      body: "현지 주민은 지원의 대상이 아니라 변화를 만들어 가는 주체입니다. 우리는 주민들의 목소리와 경험을 존중하고, 현지 기관 및 지역사회와 함께 필요한 사업을 기획하고 실행합니다.",
+      id: "equal_partnership",
+      titleKo: "동등한 협력",
+      titleEn: "Equal Partnership",
+      body: "일방적인 지원이 아닌 상호 존중과 신뢰를 바탕으로 협력합니다. 지역사회와 현지 기관이 기획부터 실행, 평가까지 주도적으로 참여하는 관계를 만들어 갑니다.",
     },
     {
       id: "expertise",
       titleKo: "전문성과 책임",
       titleEn: "Expertise & Accountability",
-      body: "좋은 의도만으로 지속적인 변화를 만들 수는 없습니다. 우리는 현장 경험과 전문지식을 바탕으로 각 나라의 사회·문화적 환경과 실제 필요에 적합한 사업을 설계하고, 실행 과정과 결과에 책임을 다합니다.",
+      body: "풍부한 현장 경험과 전문지식을 바탕으로 실효성 있는 프로젝트를 설계합니다. 사업의 전 과정에서 투명성과 책임성을 지키며, 실질적인 성과를 확인하고 개선합니다.",
     },
     {
       id: "sustainability",
-      titleKo: "지속가능한 발전",
-      titleEn: "Sustainable Development",
-      body: "일시적인 지원을 넘어 지역사회에 오래도록 남는 변화를 추구합니다. 현지 주민들이 스스로 문제를 해결하고 미래를 만들어 갈 수 있는 역량을 키워, 그 변화가 지역사회의 성장과 국가의 지속가능한 발전으로 이어지도록 함께합니다.",
+      titleKo: "지속가능성",
+      titleEn: "Sustainability",
+      body: "일시적인 지원에 머무르지 않고, 지역사회가 스스로 발전을 이어갈 수 있는 역량과 기반을 마련합니다. 작은 성과가 더 넓은 사회적 발전으로 연결되도록 노력합니다.",
     },
   ] as const,
 
