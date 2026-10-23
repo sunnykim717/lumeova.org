@@ -6,8 +6,10 @@ const ADMIN_NAV = [
   { label: "대시보드", href: "/admin/dashboard" },
   { label: "회원", href: "/admin/members" },
   { label: "후원", href: "/admin/donations" },
+  { label: "후원자 명단", href: "/admin/supporters" },
   { label: "사업", href: "/admin/projects" },
   { label: "소식", href: "/admin/news" },
+  { label: "홈 화면", href: "/admin/content" },
 ];
 
 const ROLE_LABEL: Record<string, string> = {

@@ -3,44 +3,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
+import type { HeroSlide } from "@/lib/constants/siteContent";
 
-// 슬라이드 데이터 — 사진 파일은 /public/images/hero/ 에 위치
-// objectPosition: 얼굴이 잘리지 않도록 사진별로 초점 위치 지정
-const SLIDES = [
-  {
-    src: "/images/hero/hero-1.jpg",
-    alt: "건물 앞에 모인 아이들",
-    objectPosition: "center 25%",
-    title: "교육으로 미래를 열어가겠습니다",
-    desc: "지속가능한 변화를 만들어가는 교육활동",
-  },
-  {
-    src: "/images/hero/hero-2.jpg",
-    alt: "현장 활동 지역 풍경",
-    objectPosition: "center center",
-    title: "교육으로 미래를 열어가겠습니다",
-    desc: "직접 발로 뛰며 지역의 필요를 함께 찾아갑니다",
-  },
-  {
-    src: "/images/hero/hero-3.jpg",
-    alt: "교실에서 수업에 참여하는 아이들",
-    objectPosition: "center 55%",
-    title: "교육으로 미래를 열어가겠습니다",
-    desc: "아이 한 명의 성장이 공동체 전체를 밝게 합니다",
-  },
-] as const;
 
-export function Hero() {
+export function Hero({ slides }: { slides: HeroSlide[] }) {
   const [idx, setIdx] = useState(0);
 
-  const prev = useCallback(() => setIdx((i) => (i - 1 + SLIDES.length) % SLIDES.length), []);
-  const next = useCallback(() => setIdx((i) => (i + 1) % SLIDES.length), []);
+  const prev = useCallback(() => setIdx((i) => (i - 1 + slides.length) % slides.length), [slides.length]);
+  const next = useCallback(() => setIdx((i) => (i + 1) % slides.length), [slides.length]);
 
   // 5초 자동 슬라이드
   useEffect(() => {
     const t = setInterval(next, 5000);
     return () => clearInterval(t);
   }, [next]);
+
+  if (slides.length === 0) return null;
 
   return (
     /*
@@ -53,7 +31,7 @@ export function Hero() {
       style={{ height: "100dvh" }}
     >
       {/* ── 슬라이드 이미지 ── */}
-      {SLIDES.map((slide, i) => (
+      {slides.map((slide, i) => (
         <div
           key={slide.src}
           className={`absolute inset-0 transition-opacity duration-700 ${
@@ -86,7 +64,7 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-0 section-wrap pb-14 md:pb-20 text-white z-20">
         {/* 슬라이드별 제목·설명 — 페이드 전환 */}
         <div className="relative min-h-[140px] md:min-h-[160px]">
-          {SLIDES.map((slide, i) => (
+          {slides.map((slide, i) => (
             <div
               key={i}
               className={`transition-opacity duration-500 ${
@@ -140,7 +118,7 @@ export function Hero() {
 
       {/* ── 슬라이드 도트 ── */}
       <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-        {SLIDES.map((_, i) => (
+        {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => setIdx(i)}
