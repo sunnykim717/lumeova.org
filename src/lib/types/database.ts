@@ -177,6 +177,7 @@ export interface Database {
           images: string[];
           created_at: string;
           updated_at: string;
+          deleted_at: string | null;
         };
         Insert: Partial<Database["public"]["Tables"]["projects"]["Row"]> & {
           title: string;
@@ -198,6 +199,7 @@ export interface Database {
           status: ContentStatus;
           created_at: string;
           updated_at: string;
+          deleted_at: string | null;
         };
         Insert: Partial<Database["public"]["Tables"]["news"]["Row"]> & {
           title: string;
@@ -226,6 +228,7 @@ export interface Database {
           published_at: string | null;
           created_at: string;
           updated_at: string;
+          deleted_at: string | null;
         };
         Insert: Partial<Database["public"]["Tables"]["field_stories"]["Row"]> & {
           title: string;
