@@ -14,6 +14,7 @@ export default async function AdminProjectsPage() {
   const { data: projects } = await supabase
     .from("projects")
     .select("id, title, slug, status, updated_at")
+    .is("deleted_at", null)
     .order("updated_at", { ascending: false });
 
   return (
