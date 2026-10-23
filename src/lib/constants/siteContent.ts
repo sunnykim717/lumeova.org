@@ -86,7 +86,7 @@ export const SITE_CONTENT_DEFAULTS: SiteContentMap = {
     eyebrow: `About ${ORG.nameEn}`,
     title: `${ORG.nameKo}은 어떤 단체인가요`,
     body1: `${ORG.nameKo}(${ORG.nameEn})은 국제개발협력 현장 경험을 바탕으로 설립된 비영리단체로, 교육을 통해 지속가능한 변화를 만들어가고자 합니다.`,
-    body2: "단체의 Mission·Vision과 핵심 가치는 단체 소개 페이지에서 자세히 확인하실 수 있습니다.",
+    body2: "",
   },
   what_we_do: {
     eyebrow: "What We Do",
