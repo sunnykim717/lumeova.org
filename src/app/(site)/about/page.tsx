@@ -39,10 +39,24 @@ export default function AboutPage() {
               {text}
             </p>
           ))}
-          <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65] my-8 border-l-2 border-gold pl-5">
-            {ORG.statement.closing}
-          </p>
-          <p className="text-[15px] text-muted leading-relaxed">{ORG.statement.final}</p>
+        </div>
+      </section>
+
+      {/* ── 루메오바의 철학 ── */}
+      <section className="bg-cream py-16 md:py-20">
+        <div className="section-wrap max-w-3xl">
+          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">Philosophy</p>
+          <h2 className="font-display text-[26px] md:text-[30px] text-navy mb-8">{ORG.philosophy.heading}</h2>
+          {ORG.philosophy.paragraphs.map((text, i) => (
+            <p
+              key={i}
+              className={`font-display text-[19px] md:text-[22px] text-navy leading-[1.65] border-l-2 border-gold pl-5 ${
+                i > 0 ? "mt-6" : ""
+              }`}
+            >
+              {text}
+            </p>
+          ))}
         </div>
       </section>
 
