@@ -9,6 +9,7 @@ export default async function AdminFieldStoriesPage() {
   const { data: stories } = await supabase
     .from("field_stories")
     .select("id, title, slug, country, period, status, source, privacy_reviewed, activity_date, updated_at")
+    .is("deleted_at", null)
     .order("updated_at", { ascending: false });
 
   return (

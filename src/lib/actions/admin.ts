@@ -136,12 +136,7 @@ export async function upsertProject(input: ProjectInput) {
 }
 
 export async function deleteProject(id: string) {
-  const supabase = await createClient();
-  const { error } = await supabase.from("projects").delete().eq("id", id);
-  if (error) throw new Error(error.message);
-  await logAction("project_deleted", "project", id);
-  revalidatePath("/admin/projects");
-  revalidatePath("/projects");
+  await moveToTrash("projects", id);
 }
 
 type NewsInput = {
@@ -182,12 +177,7 @@ export async function upsertNews(input: NewsInput) {
 }
 
 export async function deleteNews(id: string) {
-  const supabase = await createClient();
-  const { error } = await supabase.from("news").delete().eq("id", id);
-  if (error) throw new Error(error.message);
-  await logAction("news_deleted", "news", id);
-  revalidatePath("/admin/news");
-  revalidatePath("/news");
+  await moveToTrash("news", id);
 }
 
 export async function upsertSiteContent(key: SiteContentKey, raw: unknown) {
@@ -310,10 +300,48 @@ export async function importBandPost(input: {
 }
 
 export async function deleteFieldStory(id: string) {
+  await moveToTrash("field_stories", id);
+}
+
+export type ContentTable = "news" | "projects" | "field_stories";
+
+const CONTENT_PATHS: Record<ContentTable, string[]> = {
+  news: ["/admin/news", "/news"],
+  projects: ["/admin/projects", "/projects"],
+  field_stories: ["/admin/field-stories", "/field-stories"],
+};
+
+function revalidateContent(table: ContentTable) {
+  for (const path of CONTENT_PATHS[table]) revalidatePath(path);
+  revalidatePath("/admin/trash");
+}
+
+/** 휴지통으로 보냅니다. 실제 행은 남아 있어 복구할 수 있습니다. */
+async function moveToTrash(table: ContentTable, id: string) {
   const supabase = await createClient();
-  const { error } = await supabase.from("field_stories").delete().eq("id", id);
+  const { error } = await supabase
+    .from(table)
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id);
   if (error) throw new Error(error.message);
-  await logAction("field_story_deleted", "field_story", id);
-  revalidatePath("/admin/field-stories");
-  revalidatePath("/field-stories");
+  await logAction(`${table}_trashed`, table, id);
+  revalidateContent(table);
+}
+
+/** 휴지통에서 되돌립니다. */
+export async function restoreContent(table: ContentTable, id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from(table).update({ deleted_at: null }).eq("id", id);
+  if (error) throw new Error(error.message);
+  await logAction(`${table}_restored`, table, id);
+  revalidateContent(table);
+}
+
+/** 영구 삭제입니다. 최고 관리자와 매니저만 가능하며, 데이터베이스 정책으로도 막힙니다. */
+export async function purgeContent(table: ContentTable, id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from(table).delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  await logAction(`${table}_purged`, table, id);
+  revalidateContent(table);
 }

@@ -11,6 +11,8 @@ const ADMIN_NAV = [
   { label: "소식", href: "/admin/news" },
   { label: "현장 이야기", href: "/admin/field-stories" },
   { label: "홈 화면", href: "/admin/content" },
+  { label: "휴지통", href: "/admin/trash" },
+  { label: "변경 이력", href: "/admin/history" },
 ];
 
 const ROLE_LABEL: Record<string, string> = {

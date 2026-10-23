@@ -14,6 +14,7 @@ export default async function AdminNewsPage() {
   const { data: news } = await supabase
     .from("news")
     .select("id, title, slug, status, updated_at")
+    .is("deleted_at", null)
     .order("updated_at", { ascending: false });
 
   return (
