@@ -29,7 +29,7 @@ export default async function MembershipPage({ searchParams }: Props) {
       </p>
 
       <div className="border border-navy/10 rounded-sm bg-white p-6 md:p-8 mb-10">
-        <p className="text-[13px] text-muted mb-2">정회원 모집 현황 (후원자는 정회원과 같은 지위입니다)</p>
+        <p className="text-[13px] text-muted mb-2">정회원 모집 현황</p>
         <p className="font-display text-[32px] text-navy mb-4">
           {count === null ? "집계 준비중" : `${count} / ${REGULAR_SUPPORTER_GOAL}명`}
         </p>

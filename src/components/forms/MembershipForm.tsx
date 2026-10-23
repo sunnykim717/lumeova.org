@@ -72,8 +72,8 @@ export function MembershipForm({ initialType = "general" }: { initialType?: Memb
         <div className="grid grid-cols-2 gap-3">
           {(
             [
-              { value: "general", label: "일반회원", desc: "단체 활동에 함께하는 회원" },
-              { value: "regular", label: "정회원", desc: "승인 절차를 거쳐 등록되는 회원" },
+              { value: "general", label: "일반회원", desc: "후원금으로 단체를 지원하는 회원" },
+              { value: "regular", label: "정회원", desc: "단체의 방향과 사업 활동에 적극적으로 참여하는 회원 (관리자 승인 후 등록)" },
             ] as const
           ).map((opt) => (
             <label
