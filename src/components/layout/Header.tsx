@@ -13,7 +13,7 @@ export function Header() {
   const isHome = pathname === "/";
 
   useEffect(() => {
-    const pointer = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)");
+    const pointer = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1280px)");
     const onMove = (event: MouseEvent) => {
       if (!pointer.matches || window.scrollY <= 84) {
         setRevealed(false);
@@ -55,7 +55,7 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8 text-[15px] font-medium tracking-wide">
+        <nav className="hidden xl:flex items-center gap-6 2xl:gap-8 text-[15px] font-medium tracking-wide">
           {MAIN_NAV.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (
@@ -78,7 +78,7 @@ export function Header() {
 
         <button
           type="button"
-          className="lg:hidden inline-flex flex-col gap-[5px] p-2 -mr-2"
+          className="xl:hidden inline-flex flex-col gap-[5px] p-2 -mr-2"
           aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
           aria-expanded={open}
           aria-controls="mobile-nav"
@@ -105,7 +105,7 @@ export function Header() {
       {open && (
         <nav
           id="mobile-nav"
-          className={`lg:hidden border-t ${
+          className={`xl:hidden border-t ${
             transparent ? "border-white/20 bg-navy" : "border-border bg-cream"
           }`}
         >

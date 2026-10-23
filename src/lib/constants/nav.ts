@@ -10,8 +10,8 @@ export const MAIN_NAV: NavItem[] = [
   { label: "프로젝트", href: "/projects" },
   { label: "소식", href: "/news" },
   { label: "회원가입", href: "/membership" },
-  { label: "후원하기", href: "/donate" },
   { label: "후원자 모집", href: "/support" },
+  { label: "후원하기", href: "/donate" },
   { label: "문의", href: "/contact" },
 ];
 
