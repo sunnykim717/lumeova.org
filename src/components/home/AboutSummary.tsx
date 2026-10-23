@@ -18,8 +18,8 @@ export function AboutSummary({ content }: { content: AboutContent }) {
             {content.eyebrow}
           </p>
           <h2 className="font-display text-[26px] md:text-[30px] text-navy mb-5">{content.title}</h2>
-          <p className="text-[15px] text-muted leading-relaxed mb-4">{content.body1}</p>
-          <p className="text-[15px] text-muted leading-relaxed mb-6">{content.body2}</p>
+          <p className={`text-[15px] text-muted leading-relaxed ${content.body2 ? "mb-4" : "mb-6"}`}>{content.body1}</p>
+          {content.body2 && <p className="text-[15px] text-muted leading-relaxed mb-6">{content.body2}</p>}
           <Link href="/about" className="text-[14px] font-medium text-navy underline underline-offset-4 hover:text-gold-dark">
             단체 소개 자세히 보기 →
           </Link>
