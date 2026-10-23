@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 
 export const metadata: Metadata = {
-  title: "사업분야",
-  description: "미래를여는빛 국제개발협력·교육·지역사회 협력 사업 소개",
+  title: "활동",
+  description: "미래를여는빛의 활동 소식과 사업 영역 소개",
 };
 
 // 사업 영역 정의
@@ -48,16 +48,64 @@ const AREAS = [
 export default function WhatWeDoPage() {
   return (
     <div>
-      <section className="section-wrap py-16 md:py-20 max-w-2xl">
+      <section className="section-wrap pt-16 md:pt-20 pb-12 max-w-2xl">
         <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-          What We Do
+          Our Activities
         </p>
-        <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-5">사업분야</h1>
+        <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-8">활동</h1>
+
+        <h2 className="font-display text-[22px] text-navy mb-4">함께 만들어 가는 첫걸음</h2>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-4">
+          미래를여는빛은 더 나은 내일을 위한 첫걸음을 준비하고 있습니다.
+        </p>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-10">
+          아직 단체 명의로 시작한 현장 사업은 없지만, 그동안 여러 나라에서 쌓아 온 경험과 인연을 바탕으로 앞으로의
+          활동을 구체화하고 있습니다.
+        </p>
+
+        <h3 className="font-display text-[18px] text-navy mb-3">현지 활동가들과 이어가는 소통</h3>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-4">
+          우리는 현지에서 활동하고 있는 활동가들과 연락을 주고받으며 서로의 경험과 생각을 나누고 있습니다.
+        </p>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-4">
+          각 지역의 교육환경과 생활 여건에 귀 기울이고, 실제로 어떤 지원이 필요한지 함께 고민하고 있습니다.
+        </p>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-10">
+          현장의 이야기를 충분히 듣고 이해하는 과정이 좋은 사업의 출발점이라고 생각합니다.
+        </p>
+
+        <h3 className="font-display text-[18px] text-navy mb-3">협력을 위한 준비</h3>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-4">
+          현지 활동가 및 관련 기관과 협력할 수 있는 방안을 모색하고 있으며, 안정적인 사업 추진을 위한 업무협약(MOU)을
+          준비하고 있습니다.
+        </p>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-10">
+          형식적인 협약에 그치지 않고, 서로의 역할을 이해하고 신뢰를 쌓으며 함께 책임지는 협력관계를 만들어 가고자
+          합니다.
+        </p>
+
+        <h3 className="font-display text-[18px] text-navy mb-3">후원자와 함께하는 시작</h3>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-4">
+          미래를여는빛은 교육지원사업을 함께 만들어 갈 후원자를 모집하고 있습니다.
+        </p>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-4">
+          후원은 단순한 금전적 지원을 넘어, 배움의 기회를 넓히고 새로운 가능성을 만들어 가는 과정에 동참하는 일이라고
+          생각합니다.
+        </p>
+        <p className="text-[14.5px] text-muted leading-relaxed mb-10">
+          작은 관심과 참여가 모여 현장에서 실질적인 변화로 이어질 수 있도록 차근차근 준비하겠습니다.
+        </p>
+
+        <p className="font-display text-[18px] text-navy leading-[1.65] border-l-2 border-gold pl-5 mb-4">
+          지금은 시작을 준비하는 시간입니다.
+        </p>
         <p className="text-[14.5px] text-muted leading-relaxed">
-          미래를여는빛은 아래 네 가지 영역을 중심으로 사업을 준비하고 있습니다.
-          현재 진행 중인 사업의 활동 대상국 및 세부 내용은 확정되는 대로 순차적으로
-          공개할 예정입니다.
+          서두르기보다 현장의 목소리를 듣고, 필요한 지원을 살피며, 함께할 이들과 신뢰를 쌓아가겠습니다.
         </p>
+      </section>
+
+      <section className="section-wrap pb-6">
+        <h2 className="font-display text-[22px] text-navy">사업 영역</h2>
       </section>
 
       <div className="section-wrap pb-16 md:pb-24 space-y-14">
