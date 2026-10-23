@@ -15,6 +15,13 @@ duplicate_object$$`) so it's safe to run more than once, but it does **not**
 touch or drop any table this project didn't create. Review it before running
 it against a project that has other, unrelated tables.
 
+## 1-b. Run the newer migrations (0002, 0003)
+
+For the homepage content editor and the supporter drive, paste the whole of
+`run-pending-migrations.sql` into the SQL Editor and Run it once. It contains
+`migrations/0002_site_content.sql` followed by `migrations/0003_supporter_drive.sql`
+and is safe to run again. Run it after step 1.
+
 ## 2. Create the first admin user
 
 There is intentionally no public sign-up path into `admin_users` — RLS only
