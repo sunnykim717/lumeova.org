@@ -64,3 +64,16 @@
 - 관리자 후원자 명단은 정기후원 기준 표시이며, 공개 집계는 정회원 기준이므로 기준을 맞출지 결정 필요
 - 법률 검토가 필요한 개인정보 처리방침과 이용약관 확정
 - 단체 소재지 상세 주소 (계산동) 확정 여부 결정
+
+## 6. Cloudflare 연결 절차 (세션에서 배포 상태를 확인하기 위한 설정)
+
+이 작업 세션에서는 Cloudflare와 `lumeova.org`에 직접 접속할 수 없습니다. 아래 설정을 마치면 배포 상태를 직접 확인할 수 있습니다. 토큰은 채팅이나 문서에 적지 않습니다.
+
+1. Cloudflare 대시보드에서 읽기 전용 API 토큰을 만듭니다.
+   - 권한: Account → Workers Scripts → Read, Workers Builds(Deployments) → Read
+   - 수정 권한은 주지 않습니다.
+2. 세션 제목 표시줄의 클라우드 환경 메뉴 → **Edit**에서 토큰을 등록합니다.
+   - Network secrets(또는 API credentials) 항목이 있으면 거기에 추가합니다.
+   - 없으면 환경 변수 `CLOUDFLARE_API_TOKEN`으로 추가합니다.
+3. 네트워크 접근 설정에서 `api.cloudflare.com`을 허용 목록에 추가합니다.
+4. 저장한 뒤 새 세션을 시작합니다.
