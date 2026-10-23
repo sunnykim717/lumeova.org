@@ -1,2 +1,5 @@
-/** Number of 상시후원자 needed before the organization can apply for nonprofit status. */
+/**
+ * 정회원 모집 목표 인원. 후원자는 정회원과 같은 지위이며, 승인된 정회원 수로 집계합니다.
+ * 이 수에 도달하면 비영리법인 전환을 검토합니다.
+ */
 export const REGULAR_SUPPORTER_GOAL = 100;
