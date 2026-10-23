@@ -61,7 +61,7 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
       <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/75 via-black/40 to-transparent pointer-events-none z-10" />
 
       {/* ── 텍스트 / CTA — 하단 배치, 얼굴 영역(상단) 비침 ── */}
-      <div className="absolute inset-x-0 bottom-0 section-wrap pb-14 md:pb-20 text-white z-20">
+      <div className="absolute inset-x-0 bottom-0 section-wrap w-full pb-14 md:pb-20 text-white z-20">
         {/* 슬라이드별 제목·설명 — 페이드 전환 */}
         <div className="relative min-h-[140px] md:min-h-[160px]">
           {slides.map((slide, i) => (
