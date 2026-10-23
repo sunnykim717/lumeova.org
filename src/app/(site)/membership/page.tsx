@@ -10,7 +10,13 @@ export const metadata: Metadata = {
 
 export const revalidate = 300;
 
-export default async function MembershipPage() {
+type Props = {
+  searchParams: Promise<{ type?: string }>;
+};
+
+export default async function MembershipPage({ searchParams }: Props) {
+  const { type } = await searchParams;
+  const initialType = type === "regular" ? "regular" : "general";
   const count = await getRegularSupporterCount();
   const percent = count === null ? null : Math.min(100, Math.round((count / REGULAR_SUPPORTER_GOAL) * 100));
 
@@ -36,7 +42,7 @@ export default async function MembershipPage() {
         <p className="text-[12.5px] text-muted mt-3">관리자가 승인한 정회원 수를 기준으로 집계합니다.</p>
       </div>
 
-      <MembershipForm />
+      <MembershipForm initialType={initialType} />
     </div>
   );
 }

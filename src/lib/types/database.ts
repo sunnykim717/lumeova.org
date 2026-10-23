@@ -172,6 +172,7 @@ export interface Database {
           start_date: string | null;
           end_date: string | null;
           status: ContentStatus;
+          category: "education_support" | "leadership_support" | null;
           thumbnail: string | null;
           images: string[];
           created_at: string;

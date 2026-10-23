@@ -2,21 +2,47 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllProjects } from "@/lib/data/content";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { PROJECT_CATEGORIES, isProjectCategory, projectCategoryLabel } from "@/lib/constants/projects";
 
 export const metadata: Metadata = {
   title: "사업",
   description: "미래를여는빛이 진행하는 사업 목록",
 };
 
-export default async function ProjectsPage() {
-  const projects = await getAllProjects();
+type Props = {
+  searchParams: Promise<{ category?: string }>;
+};
+
+export default async function ProjectsPage({ searchParams }: Props) {
+  const { category: rawCategory } = await searchParams;
+  const category = isProjectCategory(rawCategory) ? rawCategory : null;
+  const allProjects = await getAllProjects();
+  const projects = category ? allProjects.filter((p) => p.category === category) : allProjects;
+  const heading = projectCategoryLabel(category) ?? "사업";
 
   return (
     <div className="section-wrap py-16 md:py-20">
       <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
         Projects
       </p>
-      <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-10">사업</h1>
+      <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-6">{heading}</h1>
+
+      <div className="flex flex-wrap gap-2 mb-10">
+        {[{ value: null, label: "전체" }, ...PROJECT_CATEGORIES].map((tab) => {
+          const active = tab.value === category;
+          return (
+            <Link
+              key={tab.label}
+              href={tab.value ? `/projects?category=${tab.value}` : "/projects"}
+              className={`text-[13px] px-3.5 py-1.5 rounded-sm border ${
+                active ? "bg-navy text-cream border-navy" : "border-navy/15 text-navy hover:bg-navy/5"
+              }`}
+            >
+              {tab.label}
+            </Link>
+          );
+        })}
+      </div>
 
       {projects.length === 0 ? (
         <div className="border border-dashed border-navy/20 rounded-sm py-24 text-center">

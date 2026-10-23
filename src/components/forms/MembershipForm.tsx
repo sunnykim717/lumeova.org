@@ -8,9 +8,9 @@ import { formatBirthDateInput, normalizeBirthDate } from "@/lib/utils/birthDate"
 
 type MembershipType = "regular" | "general";
 
-export function MembershipForm() {
+export function MembershipForm({ initialType = "general" }: { initialType?: MembershipType }) {
   const router = useRouter();
-  const [membershipType, setMembershipType] = useState<MembershipType>("general");
+  const [membershipType, setMembershipType] = useState<MembershipType>(initialType);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string>("");

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MAIN_NAV } from "@/lib/constants/nav";
+import { MAIN_NAV, type NavItem } from "@/lib/constants/nav";
 import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
@@ -56,24 +56,9 @@ export function Header() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8 text-[14px] xl:text-[15px] font-medium tracking-wide">
-          {MAIN_NAV.map((item) => {
-            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`whitespace-nowrap py-1 border-b-2 transition-colors duration-300 ${
-                  active
-                    ? "border-gold text-gold"
-                    : transparent
-                    ? "border-transparent text-cream hover:text-gold"
-                    : "border-transparent text-navy hover:text-gold-dark"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+          {MAIN_NAV.map((item) => (
+            <DesktopNavItem key={item.href + item.label} item={item} pathname={pathname} transparent={transparent} />
+          ))}
         </nav>
 
         <button
@@ -110,30 +95,135 @@ export function Header() {
           }`}
         >
           <ul className="section-wrap flex flex-col py-3">
-            {MAIN_NAV.map((item) => {
-              const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`block py-3.5 text-[17px] font-medium transition-colors ${
-                      active
-                        ? "text-gold"
-                        : transparent
-                        ? "text-cream hover:text-gold"
-                        : "text-navy hover:text-gold-dark"
-                    }`}
-                    onClick={() => { setOpen(false); setRevealed(false); }}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
+            <MobileNavList
+              items={MAIN_NAV}
+              depth={0}
+              pathname={pathname}
+              transparent={transparent}
+              onNavigate={() => { setOpen(false); setRevealed(false); }}
+            />
           </ul>
         </nav>
       )}
     </header>
     </div>
+  );
+}
+
+function isActive(href: string, pathname: string) {
+  const path = href.split("?")[0];
+  return path === "/" ? pathname === "/" : pathname.startsWith(path);
+}
+
+/** Links with a query string (e.g. ?category=) share a path with their parent, so only the parent is highlighted. */
+function isActiveNavLink(href: string, pathname: string) {
+  return !href.includes("?") && isActive(href, pathname);
+}
+
+function DesktopNavItem({ item, pathname, transparent }: { item: NavItem; pathname: string; transparent: boolean }) {
+  const active = isActive(item.href, pathname);
+  const linkClass = `whitespace-nowrap py-1 border-b-2 transition-colors duration-300 ${
+    active
+      ? "border-gold text-gold"
+      : transparent
+      ? "border-transparent text-cream hover:text-gold"
+      : "border-transparent text-navy hover:text-gold-dark"
+  }`;
+
+  if (!item.children) {
+    return (
+      <Link href={item.href} className={linkClass}>
+        {item.label}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="group relative">
+      <Link href={item.href} className={linkClass}>
+        {item.label}
+      </Link>
+      <div className="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+        <div className="min-w-[180px] rounded-sm border border-border bg-cream py-2 shadow-md">
+          <DesktopSubList items={item.children} depth={0} pathname={pathname} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DesktopSubList({ items, depth, pathname }: { items: NavItem[]; depth: number; pathname: string }) {
+  return (
+    <>
+      {items.map((child) => {
+        const active = isActiveNavLink(child.href, pathname);
+        return (
+          <div key={child.href + child.label}>
+            <Link
+              href={child.href}
+              className={`block whitespace-nowrap py-2 pr-5 text-[14px] transition-colors hover:bg-navy/5 ${
+                active ? "text-gold-dark font-semibold" : "text-navy hover:text-gold-dark"
+              }`}
+              style={{ paddingLeft: 16 + depth * 16 }}
+            >
+              {child.label}
+            </Link>
+            {child.children && <DesktopSubList items={child.children} depth={depth + 1} pathname={pathname} />}
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+function MobileNavList({
+  items,
+  depth,
+  pathname,
+  transparent,
+  onNavigate,
+}: {
+  items: NavItem[];
+  depth: number;
+  pathname: string;
+  transparent: boolean;
+  onNavigate: () => void;
+}) {
+  return (
+    <>
+      {items.map((item) => {
+        const active = isActiveNavLink(item.href, pathname);
+        return (
+          <li key={item.href + item.label}>
+            <Link
+              href={item.href}
+              className={`block py-3.5 font-medium transition-colors ${depth === 0 ? "text-[17px]" : "text-[15px]"} ${
+                active
+                  ? "text-gold"
+                  : transparent
+                  ? "text-cream hover:text-gold"
+                  : "text-navy hover:text-gold-dark"
+              }`}
+              style={{ paddingLeft: depth * 16 }}
+              onClick={onNavigate}
+            >
+              {depth > 0 && "· "}
+              {item.label}
+            </Link>
+            {item.children && (
+              <ul className="flex flex-col">
+                <MobileNavList
+                  items={item.children}
+                  depth={depth + 1}
+                  pathname={pathname}
+                  transparent={transparent}
+                  onNavigate={onNavigate}
+                />
+              </ul>
+            )}
+          </li>
+        );
+      })}
+    </>
   );
 }

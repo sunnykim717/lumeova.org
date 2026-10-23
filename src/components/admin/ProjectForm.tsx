@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { upsertProject } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/Button";
 import type { ContentStatus, Project } from "@/lib/types/database";
+import { PROJECT_CATEGORIES, isProjectCategory, type ProjectCategory } from "@/lib/constants/projects";
 
 export function ProjectForm({ project }: { project?: Project }) {
   const router = useRouter();
@@ -19,6 +20,9 @@ export function ProjectForm({ project }: { project?: Project }) {
   const [startDate, setStartDate] = useState(project?.start_date ?? "");
   const [endDate, setEndDate] = useState(project?.end_date ?? "");
   const [status, setStatus] = useState<ContentStatus>(project?.status ?? "draft");
+  const [category, setCategory] = useState<ProjectCategory | "">(
+    isProjectCategory(project?.category) ? project.category : ""
+  );
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,6 +39,7 @@ export function ProjectForm({ project }: { project?: Project }) {
           start_date: startDate,
           end_date: endDate,
           status,
+          category,
         });
         router.push("/admin/projects");
       } catch (err) {
@@ -118,6 +123,37 @@ export function ProjectForm({ project }: { project?: Project }) {
           />
         </div>
       </div>
+
+      <div>
+
+        <label className="block text-[13px] text-muted mb-1.5">사업 영역</label>
+
+        <select
+
+          value={category}
+
+          onChange={(e) => setCategory(e.target.value as ProjectCategory | "")}
+
+          className="rounded-sm border border-border px-3.5 py-2.5 text-[14px]"
+
+        >
+
+          <option value="">미분류 (전체에만 표시)</option>
+
+          {PROJECT_CATEGORIES.map((c) => (
+
+            <option key={c.value} value={c.value}>
+
+              {c.label}
+
+            </option>
+
+          ))}
+
+        </select>
+
+      </div>
+
 
       <div>
         <label className="block text-[13px] text-muted mb-1.5">상태</label>
