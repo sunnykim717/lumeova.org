@@ -4,22 +4,18 @@ import { matchDeposits, type OpenDonation, type UnmatchedDeposit } from "@/lib/b
 import { BankCsvUpload } from "@/components/admin/BankCsvUpload";
 import { BankMatchTable, type MatchRow } from "@/components/admin/BankMatchTable";
 
-const LOOKBACK_DAYS = 90;
-
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" });
 }
 
 export default async function AdminDonationImportPage() {
   const supabase = await createClient();
-  const since = new Date(Date.now() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString();
 
   const [{ data: deposits }, { data: donations }, { data: confirmed }] = await Promise.all([
     supabase
       .from("bank_transactions")
       .select("id, transacted_at, amount, counterparty_name")
       .is("matched_payment_id", null)
-      .gte("transacted_at", since)
       .order("transacted_at", { ascending: false })
       .limit(300),
     supabase
@@ -94,7 +90,7 @@ export default async function AdminDonationImportPage() {
       <BankCsvUpload />
 
       <h2 className="font-display text-[18px] text-navy mt-12 mb-4">
-        미확인 입금 (최근 {LOOKBACK_DAYS}일)
+        미확인 입금 (최신 300건)
       </h2>
       <BankMatchTable rows={rows} />
     </div>
