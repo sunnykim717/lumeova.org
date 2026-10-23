@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { MembershipStatus, PaymentStatus, ContentStatus } from "@/lib/types/database";
+import { sanitizeSection, type SiteContentKey } from "@/lib/constants/siteContent";
 
 /**
  * All mutations here go through the anon-key server client — i.e. the
@@ -183,4 +184,21 @@ export async function deleteNews(id: string) {
   await logAction("news_deleted", "news", id);
   revalidatePath("/admin/news");
   revalidatePath("/news");
+}
+
+export async function upsertSiteContent(key: SiteContentKey, raw: unknown) {
+  const value = sanitizeSection(key, raw);
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { error } = await supabase
+    .from("site_content")
+    .upsert({ key, value, updated_by: user?.id ?? null }, { onConflict: "key" });
+  if (error) throw new Error(error.message);
+
+  await logAction("site_content_updated", "site_content", key);
+  revalidatePath("/", "layout");
+  revalidatePath("/admin/content");
 }

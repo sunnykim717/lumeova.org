@@ -15,6 +15,7 @@ export const MAIN_NAV: NavItem[] = [
 ];
 
 export const FOOTER_LINKS: NavItem[] = [
+  { label: "상시후원자 모집", href: "/support" },
   { label: "개인정보처리방침", href: "/privacy" },
   { label: "이용약관", href: "/terms" },
   { label: "문의하기", href: "/contact" },

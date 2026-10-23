@@ -205,6 +205,22 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["news"]["Row"]>;
         Relationships: [];
       };
+      site_content: {
+        Row: {
+          key: string;
+          value: Record<string, unknown>;
+          updated_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          key: string;
+          value: Record<string, unknown>;
+          updated_by?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["site_content"]["Insert"]>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -215,6 +231,10 @@ export interface Database {
       current_admin_role: {
         Args: Record<string, never>;
         Returns: AdminRole | null;
+      };
+      regular_supporter_count: {
+        Args: Record<string, never>;
+        Returns: number;
       };
     };
   };
