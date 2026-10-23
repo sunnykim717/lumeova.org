@@ -51,9 +51,6 @@ const SECTIONS = [
 export default function PrivacyPage() {
   return (
     <div className="section-wrap py-16 md:py-20 max-w-2xl">
-      <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-        Privacy Policy
-      </p>
       <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-3">개인정보처리방침</h1>
       <p className="text-[13px] text-muted mb-10">버전 {PRIVACY_POLICY_VERSION} · 정식 시행 전 초안입니다</p>
 

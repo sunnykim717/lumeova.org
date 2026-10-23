@@ -13,7 +13,6 @@ export default function AboutPage() {
       {/* ── 소개 + 기본 정보 ── */}
       <section className="section-wrap py-16 md:py-20">
         <div className="max-w-3xl">
-          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">About</p>
           <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-5">단체 소개</h1>
           <p className="text-[15px] text-muted leading-relaxed mb-4">
             {ORG.nameKo}({ORG.nameEn})은 국제개발협력 현장 경험을 바탕으로
@@ -45,7 +44,6 @@ export default function AboutPage() {
       {/* ── 루메오바의 철학 ── */}
       <section className="bg-cream py-16 md:py-20">
         <div className="section-wrap max-w-3xl">
-          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">Philosophy</p>
           <h2 className="font-display text-[26px] md:text-[30px] text-navy mb-8">{ORG.philosophy.heading}</h2>
           {ORG.philosophy.paragraphs.map((text, i) => (
             <p
@@ -65,7 +63,7 @@ export default function AboutPage() {
         <div className="section-wrap grid md:grid-cols-2 gap-12">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-dark mb-3">
-              Mission | 미션
+              미션
             </p>
             <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65]">
               {ORG.mission}
@@ -74,7 +72,7 @@ export default function AboutPage() {
           </div>
           <div>
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-dark mb-3">
-              Vision | 비전
+              비전
             </p>
             <p className="font-display text-[17px] md:text-[19px] text-navy leading-[1.65]">
               {ORG.vision}
@@ -86,9 +84,6 @@ export default function AboutPage() {
 
       {/* ── 핵심 가치 — typography + dividers only, no icons ── */}
       <section className="section-wrap py-16 md:py-20">
-        <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-2">
-          Core Values
-        </p>
         <h2 className="font-display text-[22px] text-navy mb-10">핵심 가치</h2>
         <div>
           {ORG.coreValues.map((v, i) => (
@@ -134,9 +129,9 @@ export default function AboutPage() {
       <section className="section-wrap pb-16 md:pb-20">
         <h2 className="font-display text-[22px] text-navy mb-12">CI 소개</h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="flex justify-center md:justify-start">
-            <div className="bg-white border border-border rounded-sm p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+          <div className="flex w-full min-w-0 justify-center md:justify-start">
+            <div className="w-full max-w-full bg-white border border-border rounded-sm p-6">
               <Logo size="brand-story" />
             </div>
           </div>

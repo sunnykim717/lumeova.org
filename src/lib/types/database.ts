@@ -206,6 +206,34 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["news"]["Row"]>;
         Relationships: [];
       };
+      field_stories: {
+        Row: {
+          id: string;
+          title: string;
+          slug: string;
+          country: string | null;
+          period: "past" | "post_founding";
+          activity_date: string | null;
+          summary: string | null;
+          body: string | null;
+          photos: { url: string; caption: string; consent: boolean }[];
+          status: ContentStatus;
+          source: "manual" | "band";
+          band_url: string | null;
+          has_personal_info: boolean;
+          privacy_reviewed: boolean;
+          reviewed_at: string | null;
+          published_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["field_stories"]["Row"]> & {
+          title: string;
+          slug: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["field_stories"]["Row"]>;
+        Relationships: [];
+      };
       site_content: {
         Row: {
           key: string;
@@ -243,6 +271,7 @@ export interface Database {
 
 export type Project = Database["public"]["Tables"]["projects"]["Row"];
 export type NewsItem = Database["public"]["Tables"]["news"]["Row"];
+export type FieldStory = Database["public"]["Tables"]["field_stories"]["Row"];
 export type Supporter = Database["public"]["Tables"]["supporters"]["Row"];
 export type Membership = Database["public"]["Tables"]["memberships"]["Row"];
 export type Donation = Database["public"]["Tables"]["donations"]["Row"];

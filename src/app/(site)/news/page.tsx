@@ -17,9 +17,6 @@ export default async function NewsPage() {
 
   return (
     <div className="section-wrap py-16 md:py-20 max-w-3xl">
-      <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-        News
-      </p>
       <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-10">소식</h1>
 
       {news.length === 0 ? (

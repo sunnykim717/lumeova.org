@@ -49,9 +49,6 @@ export default function WhatWeDoPage() {
   return (
     <div>
       <section className="section-wrap pt-16 md:pt-20 pb-12 max-w-2xl">
-        <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-          Our Activities
-        </p>
         <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-8">활동</h1>
 
         <h2 className="font-display text-[22px] text-navy mb-4">함께 만들어 가는 첫걸음</h2>

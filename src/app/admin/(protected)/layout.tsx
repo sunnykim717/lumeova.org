@@ -9,6 +9,7 @@ const ADMIN_NAV = [
   { label: "후원자 명단", href: "/admin/supporters" },
   { label: "사업", href: "/admin/projects" },
   { label: "소식", href: "/admin/news" },
+  { label: "현장 이야기", href: "/admin/field-stories" },
   { label: "홈 화면", href: "/admin/content" },
 ];
 

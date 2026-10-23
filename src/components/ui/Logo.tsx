@@ -29,7 +29,7 @@ export function Logo({
   return (
     <div
       className={`flex-shrink-0 ${className}`}
-      style={{ width: `${sizeConfig.width}px`, height: "auto" }}
+      style={{ width: `${sizeConfig.width}px`, maxWidth: "100%", height: "auto" }}
       onClick={onClick}
     >
       <Image

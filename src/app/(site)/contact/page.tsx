@@ -10,9 +10,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="section-wrap py-16 md:py-20 max-w-2xl">
-      <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-        Contact
-      </p>
       <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-6">문의하기</h1>
       <p className="text-[14.5px] text-muted leading-relaxed mb-10">
         {ORG.nameKo}에 궁금하신 점이 있으시면 전화 또는 이메일로 문의해 주세요.

@@ -22,12 +22,8 @@ export default async function ProjectsPage({ searchParams }: Props) {
 
   return (
     <div className="section-wrap py-16 md:py-20">
-      <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-        Projects
-      </p>
       {!category && (
         <section className="max-w-2xl mb-14">
-          <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">Our Programs</p>
           <h2 className="font-display text-[22px] text-navy mb-4">배움의 기회를 이어갑니다</h2>
           <p className="text-[14.5px] text-muted leading-relaxed mb-4">
             미래를여는빛은 교육을 통해 더 많은 아동과 청소년이 자신의 가능성을 발견하고 미래를 준비할 수 있도록

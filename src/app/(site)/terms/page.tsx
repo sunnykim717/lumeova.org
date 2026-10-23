@@ -9,9 +9,6 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <div className="section-wrap py-16 md:py-20 max-w-2xl">
-      <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-        Terms
-      </p>
       <h1 className="font-display text-[28px] md:text-[32px] text-navy mb-6">이용약관</h1>
 
       <div className="rounded-sm border border-gold/40 bg-cream/60 px-5 py-4 mb-8">
