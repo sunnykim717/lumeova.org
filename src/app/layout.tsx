@@ -24,6 +24,11 @@ export const metadata: Metadata = {
     template: `%s | ${ORG.nameKo}`,
   },
   description: ORG.sloganKo,
+  verification: {
+    other: {
+      "naver-site-verification": "901cab02d819a6074418bfa15ccb5950f7bc108e",
+    },
+  },
   openGraph: {
     title: `${ORG.nameKo} | ${ORG.nameEn}`,
     description: ORG.sloganKo,
