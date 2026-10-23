@@ -70,7 +70,9 @@ export const ORG = {
   address: null as string | null, // TODO: full mailing address
   phone: "+82-10-2543-3659",
   representativeBio: null as string | null, // TODO
-  history: [] as { year: string; event: string }[], // TODO: 연혁 — leave empty until supplied
+  history: [
+    { year: "2026년 8월", event: "비영리임의단체 등록" },
+  ] as { year: string; event: string }[],
   beneficiaryCount: null as string | null, // TODO — never display a number that wasn't given by the org
   partnerOrgs: [] as string[], // TODO
   awards: [] as string[], // TODO
