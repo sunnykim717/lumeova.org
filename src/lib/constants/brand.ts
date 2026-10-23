@@ -109,8 +109,9 @@ export const ORG = {
   address: null as string | null, // TODO: full mailing address
   phone: "+82-10-2543-3659",
   representativeBio: null as string | null, // TODO
+  // 연혁 날짜는 yyyy.mm.dd 형식으로 입력합니다. 일자를 모르면 yyyy.mm 까지만 씁니다.
   history: [
-    { year: "2026년 8월", event: "비영리임의단체 등록" },
+    { year: "2026.08", event: "비영리임의단체 등록" },
   ] as { year: string; event: string }[],
   beneficiaryCount: null as string | null, // TODO — never display a number that wasn't given by the org
   partnerOrgs: [] as string[], // TODO
