@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { MembershipStatus, PaymentStatus, ContentStatus } from "@/lib/types/database";
 import { sanitizeSection, type SiteContentKey } from "@/lib/constants/siteContent";
 import type { ProjectCategory } from "@/lib/constants/projects";
+import { isStoryPeriod, sanitizeStoryPhotos } from "@/lib/constants/fieldStories";
 
 /**
  * All mutations here go through the anon-key server client — i.e. the
@@ -204,4 +205,115 @@ export async function upsertSiteContent(key: SiteContentKey, raw: unknown) {
   await logAction("site_content_updated", "site_content", key);
   revalidatePath("/", "layout");
   revalidatePath("/admin/content");
+}
+
+type FieldStoryInput = {
+  id?: string;
+  title: string;
+  slug: string;
+  country: string;
+  period: string;
+  activity_date: string;
+  summary: string;
+  body: string;
+  status: ContentStatus;
+  photos: unknown;
+  has_personal_info: boolean;
+  privacy_reviewed: boolean;
+};
+
+function cleanStoryText(value: unknown, max: number): string {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+export async function upsertFieldStory(raw: FieldStoryInput) {
+  const title = cleanStoryText(raw.title, 200);
+  const slug = cleanStoryText(raw.slug, 120);
+  if (!title) throw new Error("제목을 입력해 주세요.");
+  if (!/^[a-z0-9-]+$/.test(slug)) throw new Error("주소(slug)는 영문 소문자, 숫자, -만 사용할 수 있습니다.");
+  if (!isStoryPeriod(raw.period)) throw new Error("구분을 선택해 주세요.");
+  if (!["draft", "published", "hidden"].includes(raw.status)) throw new Error("상태가 올바르지 않습니다.");
+
+  const privacyReviewed = raw.privacy_reviewed === true;
+  if (raw.status === "published" && !privacyReviewed) {
+    throw new Error("개인정보 및 사진 공개 검토를 마친 뒤에 공개할 수 있습니다.");
+  }
+
+  const supabase = await createClient();
+
+  const row = {
+    title,
+    slug,
+    country: cleanStoryText(raw.country, 60) || null,
+    period: raw.period,
+    activity_date: raw.activity_date || null,
+    summary: cleanStoryText(raw.summary, 500) || null,
+    body: cleanStoryText(raw.body, 20000) || null,
+    photos: sanitizeStoryPhotos(raw.photos),
+    status: raw.status,
+    has_personal_info: raw.has_personal_info === true,
+    privacy_reviewed: privacyReviewed,
+    reviewed_at: privacyReviewed ? new Date().toISOString() : null,
+    published_at: raw.status === "published" ? new Date().toISOString() : null,
+  };
+
+  if (raw.id) {
+    const { error } = await supabase.from("field_stories").update(row).eq("id", raw.id);
+    if (error) throw new Error(error.message);
+    await logAction("field_story_updated", "field_story", raw.id);
+  } else {
+    const { data, error } = await supabase.from("field_stories").insert(row).select("id").single();
+    if (error) throw new Error(error.message);
+    await logAction("field_story_created", "field_story", data.id);
+  }
+
+  revalidatePath("/admin/field-stories");
+  revalidatePath("/field-stories");
+}
+
+export async function importBandPost(input: {
+  title: string;
+  body: string;
+  country: string;
+  period: string;
+  activity_date: string;
+  band_url: string;
+}) {
+  const title = cleanStoryText(input.title, 200);
+  if (!title) throw new Error("제목이 비어 있습니다. 첫 줄이 제목으로 쓰입니다.");
+  if (!isStoryPeriod(input.period)) throw new Error("구분을 선택해 주세요.");
+  const bandUrl = cleanStoryText(input.band_url, 500);
+  if (bandUrl && !bandUrl.startsWith("https://")) throw new Error("BAND 주소는 https://로 시작해야 합니다.");
+
+  const slug = `band-${Date.now().toString(36)}`;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("field_stories")
+    .insert({
+      title,
+      slug,
+      country: cleanStoryText(input.country, 60) || null,
+      period: input.period,
+      activity_date: input.activity_date || null,
+      body: cleanStoryText(input.body, 20000) || null,
+      status: "draft",
+      source: "band",
+      band_url: bandUrl || null,
+    })
+    .select("id")
+    .single();
+  if (error) throw new Error(error.message);
+
+  await logAction("field_story_imported", "field_story", data.id);
+  revalidatePath("/admin/field-stories");
+  return data.id;
+}
+
+export async function deleteFieldStory(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("field_stories").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  await logAction("field_story_deleted", "field_story", id);
+  revalidatePath("/admin/field-stories");
+  revalidatePath("/field-stories");
 }

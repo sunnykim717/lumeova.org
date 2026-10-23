@@ -7,7 +7,11 @@ export type NavItem = {
 export const MAIN_NAV: NavItem[] = [
   { label: "홈", href: "/" },
   { label: "단체소개", href: "/about" },
-  { label: "활동", href: "/what-we-do" },
+  {
+    label: "활동",
+    href: "/what-we-do",
+    children: [{ label: "현장 이야기", href: "/field-stories" }],
+  },
   {
     label: "사업",
     href: "/projects",
