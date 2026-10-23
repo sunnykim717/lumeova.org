@@ -122,7 +122,7 @@ export default function AboutPage() {
           <ul className="space-y-3">
             {ORG.history.map((h) => (
               <li key={h.year} className="flex gap-4 text-[14px]">
-                <span className="text-gold-dark font-medium w-14 shrink-0">{h.year}</span>
+                <span className="text-gold-dark font-medium w-24 shrink-0 whitespace-nowrap tabular-nums">{h.year}</span>
                 <span className="text-ink">{h.event}</span>
               </li>
             ))}
