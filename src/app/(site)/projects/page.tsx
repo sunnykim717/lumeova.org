@@ -22,9 +22,6 @@ export default async function ProjectsPage({ searchParams }: Props) {
 
   return (
     <div className="section-wrap py-16 md:py-20">
-      <p className="text-[12px] font-semibold tracking-[0.12em] uppercase text-gold-dark mb-3">
-        Projects
-      </p>
       {!category && (
         <section className="max-w-2xl mb-14">
           <h2 className="font-display text-[22px] text-navy mb-4">배움의 기회를 이어갑니다</h2>
