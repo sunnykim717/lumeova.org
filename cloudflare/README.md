@@ -29,4 +29,4 @@ Node.js 22 이상, jsdom 31:
 
     node scripts/prepare-membership-hotfix.cjs <운영모듈폴더> <현재UI파일> <후보폴더>
 
-후보 폴더의 served-ui.js는 테스트용 파일이며 Worker 업로드에 포함하지 않습니다. membership-worker.js만 변경하고 나머지 모듈은 원본과 해시가 같아야 합니다. 새 UI URL은 /_lumeova-membership/20261108-v16.js 입니다. Cloudflare API 업로드는 keep_assets와 keep_bindings를 사용해 기존 자산·비밀키·서비스 연결을 보존해야 합니다. 데이터베이스 마이그레이션은 없습니다.
+후보 폴더의 served-ui.js는 테스트용 파일이며 Worker 업로드에 포함하지 않습니다. membership-worker.js만 변경하고 나머지 모듈은 원본과 해시가 같아야 합니다. 새 UI URL은 /_lumeova-membership/20261108-v16.js 입니다. Cloudflare API 업로드는 keep_assets와 strict 모드의 binding inherit를 사용해 기존 자산·비밀키·서비스 연결을 보존해야 합니다. 데이터베이스 마이그레이션은 없습니다.

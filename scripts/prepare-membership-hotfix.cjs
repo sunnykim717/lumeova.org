@@ -18,4 +18,3 @@ for(const name of fs.readdirSync(runtimeDir)){if(!name.endsWith('.js'))throw Err
 fs.writeFileSync(path.join(outDir,'membership-worker.js'),runtime);
 fs.writeFileSync(path.join(outDir,'served-ui.js'),newUi);
 console.log(JSON.stringify({changed:['membership-worker.js'],uiPath:newPath,moduleCount:fs.readdirSync(runtimeDir).length}));
-
