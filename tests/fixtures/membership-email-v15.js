@@ -1,0 +1,58 @@
+(()=>{
+ const states=new WeakMap(),normalize=v=>String(v??'').trim().toLowerCase();
+ function ready(form,state){return !!state.verified&&state.email===normalize(form.querySelector('[name="email"]')?.value)}
+ window.lumeovaEmailVerification={challengeFor(form){const state=states.get(form);return state&&ready(form,state)?state.challengeId:null}};
+ function setup(form){
+  if(states.has(form))return;
+  const email=form.querySelector('[name="email"]'),label=email?.closest('label');if(!email||!label)return;
+  const state={email:'',challengeId:null,verified:false,pending:false,nextSend:0};states.set(form,state);
+  const pane=document.createElement('section');pane.dataset.membershipEmailVerification='true';pane.className='sm:col-span-2 rounded-sm border border-border p-4 space-y-3';pane.setAttribute('aria-label','정회원 이메일 인증');
+  const title=document.createElement('p');title.textContent='정회원 신청 이메일 인증';title.className='font-semibold text-navy';
+  const notice=document.createElement('p');notice.textContent='인증을 완료한 이메일로만 정회원 신청을 접수합니다. 아래 개인정보 동의와 스팸 방지 인증을 완료한 뒤 인증번호를 받아 주세요.';notice.className='text-sm text-muted';
+  const send=document.createElement('button');send.type='button';send.textContent='이메일 인증번호 받기';send.className='rounded-sm border border-navy px-4 py-2 text-sm text-navy';
+  const codeRow=document.createElement('div');codeRow.hidden=true;
+  const codeLabel=document.createElement('label');codeLabel.textContent='이메일 인증번호 (6자리)';codeLabel.className='block text-sm text-navy';
+  const code=document.createElement('input');code.type='text';code.inputMode='numeric';code.autocomplete='one-time-code';code.maxLength=6;code.name='membershipEmailCode';code.className='mt-2 w-full rounded-sm border border-border px-3 py-2';codeLabel.append(code);
+  const confirm=document.createElement('button');confirm.type='button';confirm.textContent='인증번호 확인';confirm.className='mt-2 rounded-sm border border-navy px-4 py-2 text-sm text-navy';
+  const message=document.createElement('p');message.setAttribute('role','status');message.setAttribute('aria-live','polite');message.className='text-sm text-navy';
+  codeRow.append(codeLabel,confirm);pane.append(title,notice,send,codeRow,message);label.after(pane);
+  const tell=text=>{message.textContent=text};
+  function sync(){
+   const regular=form.querySelector('[name="membershipTypeRadio"]:checked')?.value==='regular';pane.hidden=!regular;
+   const same=state.email===normalize(email.value);
+   if(!same){state.verified=false;state.challengeId=null;codeRow.hidden=true;code.value='';if(state.email)tell('이메일 주소가 변경되었습니다. 다시 인증해 주세요.');state.email=normalize(email.value)}
+   const button=form.querySelector('[type="submit"]');
+   if(button){if(regular&&!ready(form,state)){if(!button.disabled){button.disabled=true;button.dataset.emailGateDisabled='true'}}else if(button.dataset.emailGateDisabled){delete button.dataset.emailGateDisabled;button.disabled=false}}
+   send.disabled=state.pending||Date.now()<state.nextSend;confirm.disabled=state.pending||state.verified;
+   send.textContent=state.verified?'인증번호 다시 받기':state.nextSend>Date.now()?`재발송까지 ${Math.ceil((state.nextSend-Date.now())/1000)}초`:'이메일 인증번호 받기';
+  }
+  async function request(path,body){const response=await fetch('/api/membership/email/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});let data;try{data=await response.json()}catch{throw Error('연결 상태를 확인한 뒤 다시 시도해 주세요.')}if(!response.ok)throw Error(data.error??'이메일 인증을 진행하지 못했습니다.');return data}
+  const session=fetch('/api/membership/email/session',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error()}).catch(()=>{});
+  send.addEventListener('click',async()=>{
+   sync();if(state.pending||Date.now()<state.nextSend)return;
+   if(!email.value.trim()||!email.validity.valid){tell('이메일 주소를 확인해 주세요.');email.focus();return}
+   if(!form.querySelector('[name="privacyConsent"]')?.checked){tell('화면 아래 개인정보 수집 및 이용에 동의한 뒤 요청해 주세요.');return}
+   const token=form.querySelector('[name="cf-turnstile-response"]')?.value??'';if(!token){tell('화면 아래 스팸 방지 인증을 완료한 뒤 요청해 주세요.');return}
+   state.pending=true;state.verified=false;sync();tell('인증번호를 요청하고 있습니다.');const submittedEmail=normalize(email.value);
+   try{await session;const result=await request('send',{email:submittedEmail,privacyConsent:true,turnstileToken:token});
+    if(normalize(email.value)!==submittedEmail){tell('이메일 주소가 변경되었습니다. 다시 인증해 주세요.');return}
+    state.email=submittedEmail;state.challengeId=result.challengeId;state.nextSend=Date.now()+result.resendAfter*1000;codeRow.hidden=false;code.value='';
+    tell('인증 메일을 요청했습니다. 받은편지함과 스팸함을 확인하고 10분 안에 번호를 입력해 주세요.');code.focus();
+   }catch(error){tell(error.message)}finally{state.pending=false;try{window.turnstile?.reset()}catch{}sync()}
+  });
+  confirm.addEventListener('click',async()=>{
+   sync();if(state.pending||!state.challengeId)return;if(!/^\d{6}$/.test(code.value.trim())){tell('6자리 인증번호를 입력해 주세요.');code.focus();return}
+   state.pending=true;sync();const submittedEmail=normalize(email.value),challengeId=state.challengeId;
+   try{await request('confirm',{email:submittedEmail,challengeId,code:code.value.trim()});
+    if(normalize(email.value)!==submittedEmail||state.challengeId!==challengeId){tell('이메일 주소가 변경되었습니다. 다시 인증해 주세요.');return}
+    state.verified=true;tell('이메일 인증이 완료되었습니다. 신청 내용을 확인한 뒤 정회원 가입 신청을 제출해 주세요.');
+   }catch(error){state.verified=false;tell(error.message)}finally{state.pending=false;sync()}
+  });
+  form.addEventListener('input',sync);form.addEventListener('change',sync);sync();
+  const timer=setInterval(()=>{if(!form.isConnected){clearInterval(timer);return}sync()},1000);
+ }
+ function scan(){document.querySelectorAll('form').forEach(form=>{if(form.querySelector('[name="membershipTypeRadio"]'))setup(form)})}
+ function boot(){scan();let queued=false;new MutationObserver(()=>{if(!queued){queued=true;requestAnimationFrame(()=>{queued=false;scan()})}}).observe(document.documentElement,{childList:true,subtree:true})}
+ const idle=()=>{if(window.requestIdleCallback)window.requestIdleCallback(boot,{timeout:2000});else setTimeout(boot,50)};
+ if(document.readyState==='complete')idle();else window.addEventListener('load',idle,{once:true});
+})();
