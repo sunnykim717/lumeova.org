@@ -28,32 +28,30 @@ export default async function AdminProtectedLayout({ children }: { children: Rea
   return (
     <div className="min-h-screen bg-cream">
       <header className="bg-navy text-cream/90">
-        <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/admin/dashboard" className="font-display text-[15px] text-white">
-              lumeova admin
-            </Link>
-            <nav className="flex gap-5">
-              {ADMIN_NAV.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-[13px] text-cream/70 hover:text-white transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-          <div className="flex items-center gap-4 text-[12.5px] text-cream/60">
-            <span>
+        <div className="mx-auto grid max-w-6xl grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 px-4 py-2 sm:px-5 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:gap-x-5">
+          <Link href="/admin/dashboard" className="font-display text-[15px] text-white">
+            lumeova admin
+          </Link>
+          <nav aria-label="관리자 메뉴" className="col-span-2 row-start-2 flex flex-wrap gap-x-4 xl:col-span-1 xl:row-start-1">
+            {ADMIN_NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="inline-flex min-h-10 items-center text-[13px] text-cream/70 transition-colors hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="col-start-2 row-start-1 flex min-w-0 items-center justify-end gap-2 text-[12.5px] text-cream/60 xl:col-start-3">
+            <span className="hidden truncate sm:inline">
               {admin.displayName ?? admin.email} · {ROLE_LABEL[admin.role] ?? admin.role}
             </span>
             <SignOutButton />
           </div>
         </div>
       </header>
-      <main className="max-w-6xl mx-auto px-5 py-10">{children}</main>
+      <main className="mx-auto max-w-6xl min-w-0 px-4 py-6 sm:px-5 sm:py-10">{children}</main>
     </div>
   );
 }
