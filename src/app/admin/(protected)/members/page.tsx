@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { maskEmail, maskPhone } from "@/lib/utils/mask";
+import { RegularMemberRegistration, PromoteMemberButton } from "@/components/admin/RegularMemberControls";
 import { MemberActions } from "@/components/admin/MemberActions";
 import type { MembershipStatus } from "@/lib/types/database";
 
@@ -31,31 +32,16 @@ type Props = {
 
 export default async function AdminMembersPage({ searchParams }: Props) {
   const { status } = await searchParams;
-  const activeStatus = (status ?? "all") as MembershipStatus | "all";
-
+  const activeStatus = STATUS_TABS.find((tab) => tab.value === status)?.value ?? "all";
   const supabase = await createClient();
-
-  let query = supabase
-    .from("memberships")
-    .select("id, supporter_id, membership_type, status, created_at")
-    .order("created_at", { ascending: false });
-
-  if (activeStatus !== "all") {
-    query = query.eq("status", activeStatus);
-  }
-
-  const { data: memberships } = await query;
-  const supporterIds = [...new Set((memberships ?? []).map((m) => m.supporter_id))];
-
-  const { data: supporters } = supporterIds.length
-    ? await supabase.from("supporters").select("id, name, phone, email").in("id", supporterIds)
-    : { data: [] };
-
-  const supporterMap = new Map((supporters ?? []).map((s) => [s.id, s]));
+  const [{ data: canWrite }, { data: memberships, error }] = await Promise.all([
+    supabase.rpc("admin_can_write"),
+    supabase.rpc("admin_read_members", { p_status: activeStatus === "all" ? null : activeStatus }),
+  ]);
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-[24px] text-navy">회원</h1>
         <Link
           href="/admin/members/export"
@@ -64,6 +50,8 @@ export default async function AdminMembersPage({ searchParams }: Props) {
           CSV 내보내기
         </Link>
       </div>
+
+      {canWrite && <RegularMemberRegistration />}
 
       <div className="flex flex-wrap gap-2 mb-6">
         {STATUS_TABS.map((tab) => (
@@ -82,8 +70,8 @@ export default async function AdminMembersPage({ searchParams }: Props) {
       </div>
 
       <div className="rounded-sm border border-navy/10 bg-white overflow-x-auto">
-        <table className="w-full text-[13.5px]">
-          <thead>
+        <table className="block w-full text-[13.5px] md:table">
+          <thead className="hidden md:table-header-group">
             <tr className="border-b border-navy/10 text-left text-muted text-[12px]">
               <th className="px-4 py-3 font-medium">이름</th>
               <th className="px-4 py-3 font-medium">연락처</th>
@@ -94,25 +82,26 @@ export default async function AdminMembersPage({ searchParams }: Props) {
               <th className="px-4 py-3 font-medium">처리</th>
             </tr>
           </thead>
-          <tbody>
-            {(memberships ?? []).length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-muted">
-                  해당하는 회원이 없습니다.
+          <tbody className="block md:table-row-group">
+            {error || !memberships?.length ? (
+              <tr className="block md:table-row">
+                <td colSpan={7} className="block px-4 py-10 text-center text-muted md:table-cell">
+                  {error ? "회원 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요." : "해당하는 회원이 없습니다."}
                 </td>
               </tr>
             ) : (
               (memberships ?? []).map((m) => {
-                const supporter = supporterMap.get(m.supporter_id);
                 return (
-                  <tr key={m.id} className="border-b border-navy/5 last:border-0">
-                    <td className="px-4 py-3 text-ink font-medium">{supporter?.name ?? "-"}</td>
-                    <td className="px-4 py-3 text-muted tabular-nums">{maskPhone(supporter?.phone ?? null)}</td>
-                    <td className="px-4 py-3 text-muted">{maskEmail(supporter?.email ?? null)}</td>
-                    <td className="px-4 py-3 text-muted">
+                  <tr key={m.id} className="grid grid-cols-2 items-start gap-x-2 border-b border-navy/10 p-3 last:border-0 md:table-row md:p-0">
+                    <td className="col-span-2 p-2 font-medium text-ink md:px-4 md:py-3">
+                      {m.name}
+                    </td>
+                    <td className="break-all p-2 tabular-nums text-muted md:px-4 md:py-3">{maskPhone(m.phone)}</td>
+                    <td className="break-all p-2 text-muted md:px-4 md:py-3">{maskEmail(m.email)}</td>
+                    <td className="p-2 text-muted md:px-4 md:py-3">
                       {m.membership_type === "regular" ? "정회원" : "일반회원"}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="p-2 md:px-4 md:py-3">
                       <span
                         className={`text-[11.5px] px-2 py-0.5 rounded-full ${
                           m.status === "pending"
@@ -125,9 +114,18 @@ export default async function AdminMembersPage({ searchParams }: Props) {
                         {STATUS_LABEL[m.status]}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-muted tabular-nums">{formatDate(m.created_at)}</td>
-                    <td className="px-4 py-3">
-                      <MemberActions membershipId={m.id} status={m.status} />
+                    <td className="col-span-2 p-2 tabular-nums text-muted md:px-4 md:py-3">
+                      <span className="md:hidden">신청일 </span>{formatDate(m.created_at)}
+                    </td>
+                    <td className="col-span-2 p-2 md:px-4 md:py-3">
+                      {canWrite && (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <MemberActions membershipId={m.id} status={m.status} />
+                          {m.membership_type === "general" && (
+                            <PromoteMemberButton membershipId={m.id} memberName={m.name} />
+                          )}
+                        </div>
+                      )}
                     </td>
                   </tr>
                 );
