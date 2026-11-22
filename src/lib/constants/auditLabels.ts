@@ -1,5 +1,7 @@
 /** 변경 이력에 보여 줄 한국어 작업명. 목록에 없는 작업은 "기타 작업"으로 표시합니다. */
 const AUDIT_LABELS: Record<string, string> = {
+  membership_regular_registered: "정회원 직접 등록",
+  membership_promoted_to_regular: "정회원 전환",
   membership_approved: "회원 승인",
   membership_rejected: "회원 거절",
   membership_inactive: "회원 비활성",
