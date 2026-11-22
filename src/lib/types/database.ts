@@ -264,6 +264,47 @@ export interface Database {
         Args: Record<string, never>;
         Returns: AdminRole | null;
       };
+      admin_read_members: {
+        Args: { p_status: MembershipStatus | null };
+        Returns: {
+          id: string;
+          membership_type: MembershipType;
+          status: MembershipStatus;
+          created_at: string;
+          name: string;
+          phone: string | null;
+          email: string | null;
+        }[];
+      };
+      admin_read_member_management_history: {
+        Args: Record<string, never>;
+        Returns: {
+          id: string;
+          action: string;
+          target_type: string;
+          created_at: string;
+          actor: string | null;
+          previous_membership_type: string | null;
+        }[];
+      };
+      admin_can_write: {
+        Args: Record<string, never>;
+        Returns: boolean;
+      };
+      admin_register_regular_member: {
+        Args: {
+          p_name: string;
+          p_phone: string;
+          p_email: string;
+          p_address: string;
+          p_birth_date: string | null;
+        };
+        Returns: string;
+      };
+      admin_promote_general_member: {
+        Args: { p_id: string };
+        Returns: string;
+      };
       regular_supporter_count: {
         Args: Record<string, never>;
         Returns: number;
