@@ -2,16 +2,12 @@ import { createClient } from "@/lib/supabase/server";
 import { auditActionLabel, auditTargetLabel } from "@/lib/constants/auditLabels";
 
 function formatDateTime(iso: string) {
-  return new Date(iso).toLocaleString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
 export default async function AdminHistoryPage() {
   const supabase = await createClient();
-  const { data: logs } = await supabase
-    .from("audit_logs")
-    .select("id, action, target_type, target_id, created_at")
-    .order("created_at", { ascending: false })
-    .limit(200);
+  const { data: logs, error } = await supabase.rpc("admin_read_member_management_history");
 
   return (
     <div>
@@ -25,13 +21,15 @@ export default async function AdminHistoryPage() {
               <th className="px-4 py-3 font-medium">시각</th>
               <th className="px-4 py-3 font-medium">작업</th>
               <th className="px-4 py-3 font-medium">대상</th>
+              <th className="px-4 py-3 font-medium">처리 관리자</th>
+              <th className="px-4 py-3 font-medium">이전 회원 유형</th>
             </tr>
           </thead>
           <tbody>
             {(logs ?? []).length === 0 ? (
               <tr>
-                <td colSpan={3} className="px-4 py-10 text-center text-muted">
-                  기록된 작업이 없습니다.
+                <td colSpan={5} className="px-4 py-10 text-center text-muted">
+                  {error ? "변경 이력을 불러오지 못했습니다." : "기록된 작업이 없습니다."}
                 </td>
               </tr>
             ) : (
@@ -40,6 +38,13 @@ export default async function AdminHistoryPage() {
                   <td className="px-4 py-3 text-muted whitespace-nowrap">{formatDateTime(log.created_at)}</td>
                   <td className="px-4 py-3 text-ink">{auditActionLabel(log.action)}</td>
                   <td className="px-4 py-3 text-muted">{auditTargetLabel(log.target_type)}</td>
+                  <td className="px-4 py-3 text-muted">
+                    {log.actor ?? "—"}
+                  </td>
+                  <td className="px-4 py-3 text-muted">
+                    {log.previous_membership_type === "general" ? "일반회원"
+                      : log.previous_membership_type === "regular" ? "정회원" : "—"}
+                  </td>
                 </tr>
               ))
             )}
